@@ -1,0 +1,61 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch nodemon for backend",
+            "cwd": "${workspaceFolder}/backend/",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debug"],
+            "port": 9543
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch nodemon for worker thumbnails",
+            "cwd": "${workspaceFolder}/backend/",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debugPhotos"],
+            "port": 9544
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch nodemon for worker notifications",
+            "cwd": "${workspaceFolder}/backend/",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debugNotify"],
+            "port": 9545
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch nodemon for init database",
+            "cwd": "${workspaceFolder}/backend/",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debugInit"],
+            "port": 9546
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch nodemon for chat",
+            "cwd": "${workspaceFolder}/backend/",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debugChat"],
+            "port": 9547
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch react in debug",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/src/index.js",
+        }
+    ]
+}

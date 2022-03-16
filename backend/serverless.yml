@@ -1,0 +1,325 @@
+  org: ibernal83
+  app: wallaclone
+  service: wallaclone
+  frameworkVersion: '3'
+
+  plugins:
+    - serverless-webpack
+    - serverless-iam-roles-per-function
+    - serverless-plugin-tracing
+
+  provider:
+    name: aws
+    runtime: nodejs12.x
+    lambdaHashingVersion: '20201221'
+
+    stage: ${opt:stage, 'dev'}
+    region: ${opt:region, 'us-east-1'}
+
+    tracing:
+      lambda: true
+      apiGateway: true
+
+    environment:
+      PRODUCTS_TABLE: products-${self:provider.stage}
+      PRODUCTS_TABLE_INDEX: products-index-${self:provider.stage}
+      ATTACHMENT_S3_BUCKET: products-ibernal-${self:provider.stage}
+      ATTACHMENT_S3_URL: https://products-ibernal-${self:provider.stage}.s3.amazonaws.com/
+      SIGNED_URL_EXPIRATION: 300
+      JWKSURL: https://dev-wbbbogs3.us.auth0.com/.well-known/jwks.json
+
+    logs:
+      restApi: true
+
+    iam:
+      role:
+        statements:
+          - Effect: Allow
+            Action:
+              - xray:PutTelemetryRecords
+              - xray:PutTraceSegments
+            Resource: "*"
+
+  custom:
+    documentation:
+      api:
+        info:
+          version: v1.0.0
+          title: Wallaclone Serverless - buy and sell your products with the rest of the world
+          description: Serverless application for buying/selling products
+      models:
+        - name: CreateProductRequest
+          contentType: application/json
+          schema: ${file(models/create-product-model.json)}
+        - name: UpdateProductRequest
+          contentType: application/json
+          schema: ${file(models/update-product-model.json)}
+        - name: BookProductRequest
+          contentType: application/json
+          schema: ${file(models/book-product-model.json)}
+        - name: SoldProductRequest
+          contentType: application/json
+          schema: ${file(models/sold-product-model.json)}
+
+  functions:
+
+    Auth:
+      handler: src/lambda/auth/auth0Authorizer.handler
+
+    GetProducts:
+      handler: src/lambda/http/products/getProducts.handler
+      events:
+        - http:
+            method: get
+            path: products
+            cors: true
+            authorizer: Auth
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GetProducts-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+
+    GetProduct:
+      handler: src/lambda/http/products/getProduct.handler
+      events:
+        - http:
+            method: get
+            path: products/{productId}
+            cors: true
+            authorizer: Auth
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GetProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+
+    CreateProduct:
+      handler: src/lambda/http/products/createProduct.handler
+      events:
+        - http:
+            method: post
+            path: products
+            cors: true
+            authorizer: Auth
+            reqValidatorName: RequestBodyValidator
+            documentation:
+              summary: Create a new Product
+              description: Create a new Product
+              requestModels:
+                'application/json': CreateProductRequest
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: CreateProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:PutItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+
+    UpdateProduct:
+      handler: src/lambda/http/products/updateProduct.handler
+      events:
+        - http:
+            method: patch
+            path: products/{productId}
+            cors: true
+            authorizer: Auth
+            reqValidatorName: RequestBodyValidator
+            documentation:
+              summary: Update an existing Product
+              description: Update an existing Product
+              requestModels:
+                'application/json': UpdateProductRequest
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: UpdateProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:UpdateItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+    
+    BookProduct:
+      handler: src/lambda/http/products/bookProduct.handler
+      events:
+        - http:
+            method: patch
+            path: products/{productId}/book
+            cors: true
+            authorizer: Auth
+            reqValidatorName: RequestBodyValidator
+            documentation:
+              summary: Mark as booked an existing Product
+              description: Mark as booked an existing Product
+              requestModels:
+                'application/json': BookProductRequest
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: BookProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:UpdateItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+
+    SoldProduct:
+      handler: src/lambda/http/products/soldProduct.handler
+      events:
+        - http:
+            method: patch
+            path: products/{productId}/sold
+            cors: true
+            authorizer: Auth
+            reqValidatorName: RequestBodyValidator
+            documentation:
+              summary: Mark as sold an existing Product
+              description: Mark as sold an existing Product
+              requestModels:
+                'application/json': SoldProductRequest
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: SoldProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:UpdateItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+
+    DeleteProduct:
+      handler: src/lambda/http/products/deleteProduct.handler
+      events:
+        - http:
+            method: delete
+            path: products/{productId}
+            cors: true
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: DeleteProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:DeleteItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+
+    GenerateUploadUrl:
+      handler: src/lambda/http/products/generateUploadUrl.handler
+      events:
+        - http:
+            method: post
+            path: products/{productId}/attachment
+            cors: true
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GenerateUploadUrl-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - s3:PutObject
+          Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+        - Effect: Allow
+          Action: 
+            - dynamodb:UpdateItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+
+  resources:
+    Resources:
+      
+      GatewayResponseDefault4xx:
+        Type: AWS::ApiGateway::GatewayResponse
+        Properties:
+          ResponseParameters:
+            gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+            gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+            gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+          ResponseType: DEFAULT_4XX
+          RestApiId: 
+            Ref: ApiGatewayRestApi
+      
+      RequestBodyValidator:
+        Type: AWS::ApiGateway::RequestValidator
+        Properties:
+          Name: 'request-body-validator'
+          RestApiId: 
+            Ref: ApiGatewayRestApi
+          ValidateRequestBody: true
+          ValidateRequestParameters: false
+          
+      ProductsTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          AttributeDefinitions:
+            - AttributeName: userId
+              AttributeType: S
+            - AttributeName: createdAt
+              AttributeType: S
+            - AttributeName: productId
+              AttributeType: S
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          TableName: ${self:provider.environment.PRODUCTS_TABLE}
+          BillingMode: PAY_PER_REQUEST
+          GlobalSecondaryIndexes:
+            - IndexName: ${self:provider.environment.PRODUCTS_TABLE_INDEX}
+              KeySchema:
+                - AttributeName: userId
+                  KeyType: HASH
+                - AttributeName: productId
+                  KeyType: RANGE
+              Projection:
+                ProjectionType: ALL
+
+      AttachmentsBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+          BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}
+          CorsConfiguration:
+            CorsRules:
+              - 
+                AllowedOrigins:
+                  - '*'
+                AllowedHeaders:
+                  - '*'
+                AllowedMethods:
+                  - GET
+                  - PUT
+                  - POST
+                  - DELETE
+                  - HEAD
+                MaxAge: 300
+
+      BucketPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+          Bucket: !Ref AttachmentsBucket
+          PolicyDocument: 
+            Id: MyPolicy
+            Version: "2012-10-17"
+            Statement:
+              - Sid: PublicReadForGetBucketObjects
+                Effect: Allow
+                Principal: '*'
+                Action: 's3:GetObject'
+                Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'

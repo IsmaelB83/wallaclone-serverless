@@ -1,0 +1,17 @@
+.AdvertList__Paginator {
+    margin-top: 10px;
+}
+
+.AdvertList__Paginator .Paginator {
+    background-color: transparent;
+    padding: 8px 0;
+}
+
+.AdvertList__Paginator .Paginator .ButtonStandard:disabled {
+    background-color: var(--medium-grey) !important;
+}
+
+.SearchPanel__Statistics p { 
+    font-size: .7rem; 
+    color: rgb(15, 15, 15); 
+}
