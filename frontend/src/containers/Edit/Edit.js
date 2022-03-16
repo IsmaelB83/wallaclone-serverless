@@ -71,7 +71,6 @@ function Edit(props) {
                                     className='Profile__Form'
                                     advert={advert}
                                     onSubmit={submitAdvert}
-                                    tags={props.tags}
                         />
                     }
                     { isFetching && <Loading text={'fetching advert'}/> }

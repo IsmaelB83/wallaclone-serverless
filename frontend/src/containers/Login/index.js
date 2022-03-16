@@ -23,10 +23,9 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
     return {
-        login: (login, password) => dispatch(SessionActions.login(login, password)),
-        activateAccount: (token) => dispatch(SessionActions.activateAccount(token)),
+        login: (login, password) => dispatch(SessionActions.login(login, password))
     }
 }
 
-// Retorno el componente envuelto en el "connect", y en un withSnackBar (para los tags de info de la app)
+// Retorno el componente envuelto en el "connect" y en un withSnackBar (para los mensajes de info de la app)
 export default connect(mapStateToProps, mapDispatchToProps)(withSnackbar(Login));

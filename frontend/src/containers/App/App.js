@@ -26,41 +26,11 @@ export default function App(props) {
 
     // Destructure props
     const { enqueueSnackbar, t } = props;
-
-    // Handle actions performed from a push notification
-    const handleNotifyAction = (content) => {
-        switch (content.action) {
-            case 'navigate':
-                // Accion de navegación
-                history.push(content.data)
-                break;
-            case 'delete':
-                // Elimino de favoritos y navego a favoritos
-                store.dispatch(SessionActions.setFavorite(content.data))
-                .then(() => {
-                    enqueueSnackbar(t('Product deleted from favorites'), { variant: 'success'});
-                    history.push('/favorites')
-                })
-                .catch(error => enqueueSnackbar(t('Error deleting advert from favorites ERROR', {error}), { variant: 'error' }));
-                break;
-            case 'add':
-                // Añado a favoritos y navego a favoritos
-                store.dispatch(SessionActions.setFavorite(content.data))
-                .then(() => {
-                    enqueueSnackbar(t('Product added to favorites'), { variant: 'success'});
-                    history.push('/favorites')
-                })
-                .catch(error => enqueueSnackbar(t('Error deleting advert from favorites ERROR', {error}), { variant: 'error' }));
-                break;
-            default:
-                console.error('Uncontrolled action returned by service worker');
-        }
-    }
     
     // Session storage
     const session = LocalStorage.readLocalStorage();
     // Configuro el store, y sincronizo el history del store con el de router
-    const store = configureStore(initialState, handleNotifyAction);
+    const store = configureStore(initialState);
 
     // Dispatch login in case of session in local storage
     useEffect(() => {
@@ -78,7 +48,6 @@ export default function App(props) {
                     <Route path='/login' exact component={Login} />
                     <Route path='/published/:login' exact render={(props) => <SectionList {...props} listType='published'/>}/>
                     <PrivateRoute path='/history' exact render={(props) => <SectionList {...props} listType='history'/>}/>
-                    <PrivateRoute path='/favorites' exact render={(props) => <SectionList {...props} listType='favorites'/>}/>
                     <PrivateRoute path='/advert/create' exact render={(props) => <Edit {...props} mode='create'/>}/>
                     <PrivateRoute path='/advert/edit/:slug' exact render={(props) => <Edit {...props} mode='edit'/>}/>
                     <Route path='/advert/:slug' exact component={Detail} />

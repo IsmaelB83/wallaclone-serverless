@@ -18,18 +18,6 @@ export function session (state = initialState.session, action) {
         case TYPES.LOGOUT_SUCCESS:
         case TYPES.LOGOUT_FAILURE:
             return initialState.session;
-        case TYPES.SET_FAVORITE_SUCCESS:
-            const i = state.favorites.indexOf(action.advert._id);
-            let favorites = []
-            if (i>=0 && !action.advert.favorite) {
-                favorites = [ ...state.favorites.slice(0, i), ...state.favorites.slice(i + 1) ];
-            }  else {
-                favorites = [ ...state.favorites, action.advert._id ];
-            }
-            return {
-                ...state,
-                favorites: favorites
-            }
         default:
             return state;
     }

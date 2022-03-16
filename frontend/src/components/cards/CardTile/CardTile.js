@@ -7,10 +7,8 @@ import { Link } from "react-router-dom";
 // Material UI
 // Own components
 import AdvertChip from '../../adverts/AdvertChip';
-import ButtonIcon from '../../buttons/ButtonIcon';
 import CardAvatar from '../CardAvatar';
 import CardImage from '../CardImage';
-import CardTags from '../CardTags';
 // Own modules
 // Models
 import Advert from '../../../models/Advert';
@@ -23,9 +21,7 @@ import './styles.css';
 export default function CardTile (props) {
 
     // Props destructuring
-    const { slug, name, thumbnail, tags, price, sold, booked, type, favorite, user, createdAt } = props.advert;
-    const { isLogin, isMyAdvert } = props;
-    const { onOpenChat, onFavoriteAdvert } = props;
+    const { slug, name, thumbnail, price, sold, booked, type, user, createdAt } = props.advert;
 
     // Render
     return(
@@ -37,17 +33,10 @@ export default function CardTile (props) {
             <div className='CardTile__Content'>
                 <div className='CardTile__ContentType'>
                     <AdvertChip type='type' value={type}/>
-                    { isLogin && !isMyAdvert &&
-                        <div className='CardTile__Actions'>
-                            <ButtonIcon onClick={onOpenChat} icon='chat'/>
-                            <ButtonIcon onClick={onFavoriteAdvert} icon='favorite' active={favorite}/>
-                        </div>
-                    }
                 </div>                
                 <div className='CardTile_ContentTitle'>
                     <Link to={`/advert/${slug}`} className='CardTile__Title'><h2>{name}</h2></Link>
                 </div>
-                <CardTags tags={tags} />
             </div>
             <div className='CardTile__Footer'>
                 <CardAvatar login={user.login} name={user.name} avatar={user.avatar}/>
@@ -59,8 +48,4 @@ export default function CardTile (props) {
 
 CardTile.propTypes = {
     advert: PropTypes.instanceOf(Advert).isRequired,    
-    isMyAdvert: PropTypes.bool,
-    isLogin: PropTypes.bool,
-    onOpenChat: PropTypes.func,
-    onFavoriteAdvert: PropTypes.func
 }

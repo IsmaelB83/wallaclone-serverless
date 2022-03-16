@@ -13,7 +13,6 @@ import { AdvertsActions, SessionActions } from '../../store/GlobalActions';
 const mapStateToProps = (state) => {
     return {
         session: state.session,
-        tags: state.tags,
         ui: state.ui
     }
 }

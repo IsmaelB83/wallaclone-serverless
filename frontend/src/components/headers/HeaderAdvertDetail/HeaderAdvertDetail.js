@@ -9,7 +9,7 @@ import React from 'react';
 import '../styles.css';
 
 
-// Header favorites section
+// Header advert detail section
 export default function HeaderAdvertDetail(props) {
     return (
         <div className='Section__Header'>
@@ -17,7 +17,6 @@ export default function HeaderAdvertDetail(props) {
                 <h1 className='Title'>{props.t('Product detail')}</h1>
             </div>
             <p className='Text'>{props.t('In this section you can display MORE')}</p>
-            <p className='Text'>{props.t('You can also add it to your favorites MORE')}</p>
         </div>
     );
 }

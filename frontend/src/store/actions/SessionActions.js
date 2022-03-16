@@ -1,6 +1,5 @@
 // API
 import AuthServices from '../../services/AuthServices';
-import UserServices from '../../services/UserServices';
 // Own modules
 import LocalStorage from '../../utils/Storage';
 // Actions
@@ -90,29 +89,3 @@ export const logout = () => {
 const logoutRequest = () => ({ type: ACTIONS.LOGOUT_REQUEST });
 const logoutSuccess = () => ({ type: ACTIONS.LOGOUT_SUCCESS });
 const logoutFailure = error => ({ type: ACTIONS.LOGOUT_FAILURE, error });
-
-/**
- * Guardar el anuncio en los favoritos del usuario
- * @param {String} slug Slug del anuncio que queremos guardar como favorito
- * @param {String} jwt Token para autenticar en la API
- */
-export const setFavorite = (slug) => {
-    return async function(dispatch, getState, extra) {
-        dispatch(setFavoriteRequest());
-        return UserServices.setFavorite(slug, getState().session.jwt)
-        .then(response => {
-            response.advert.favorite = response.favorite;
-            dispatch(setFavoriteSuccess(response.advert));
-            return response.advert;
-        })
-        .catch(error => {
-            let message = error.response && error.response.data ? error.response.data.data : error.message;
-            dispatch(setFavoriteFailure(message));
-            throw message;
-        });
-    }
-}
-
-const setFavoriteRequest = () => ({ type: ACTIONS.SET_FAVORITE_REQUEST });
-const setFavoriteFailure = error => ({ type: ACTIONS.SET_FAVORITE_FAILURE, error });
-const setFavoriteSuccess = advert => ({ type: ACTIONS.SET_FAVORITE_SUCCESS, advert });

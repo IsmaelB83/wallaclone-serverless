@@ -22,11 +22,10 @@ export default function SectionList (props) {
 
     // Destructure props
     const { enqueueSnackbar, 
-            fetchUserAdverts, fetchFavorites, fetchIterateAdverts, fetchSoldHistory, setCurrentPage, 
-            setFavorite, bookAdvert, sellAdvert, deleteAdvert, createChat, logout } = props;
-    const { start, end, totalCount } = props.lastCall;
+            fetchSoldHistory, fetchUserAdverts, setCurrentPage, 
+            bookAdvert, sellAdvert, deleteAdvert, logout } = props;
     const { currentPage, isFetching } = props.ui;
-    const { adverts, session, chats, history, listType } = props;
+    const { adverts, session, history, listType } = props;
     const { login } = props.match.params;
     const sessionLogin = props.session.login;
 
@@ -44,12 +43,7 @@ export default function SectionList (props) {
             default:
                 break;
         }
-    }, [listType, fetchSoldHistory, fetchFavorites, fetchUserAdverts, enqueueSnackbar, login, sessionLogin, t]);
-
-    // Paginación sobre la colección de anuncios
-    const fetchIterateAdvertsHandler = (direction) => {
-        fetchIterateAdverts(direction).catch(error => enqueueSnackbar(t('Error iterating adverts ERROR', {error}), { variant: 'error' }));
-    }
+    }, [listType, fetchSoldHistory, fetchUserAdverts, enqueueSnackbar, login, sessionLogin, t]);
 
     // Reservado
     const bookAdvertHandler = slug => {
@@ -92,12 +86,9 @@ export default function SectionList (props) {
             <NavBar session={session} onLogout={logout}/>
             <Container className='Container'>
                 <main className='Section__Wrapper'>
-                    {HeaderSection(listType, totalCount, login, session)}
+                    {HeaderSection(listType, adverts.length, login, session)}
                     <AdvertList 
                         type='list' 
-                        start={start}
-                        end={end}
-                        totalCount={totalCount}
                         currentPage={currentPage}
                         adverts={adverts}
                         session={session}
@@ -106,7 +97,6 @@ export default function SectionList (props) {
                         onSellAdvert={sellAdvertHandler}
                         onDeleteAdvert={deleteAdvertRequestHandler}
                         onSetCurrentPage={setCurrentPage}
-                        onfetchIterateAdverts={fetchIterateAdvertsHandler}
                         onEditAdvert={editAdvertHandler}
                     />
                 </main>

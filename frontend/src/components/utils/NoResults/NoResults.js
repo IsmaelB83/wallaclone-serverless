@@ -13,9 +13,8 @@ export default function NoResults(props) {
     
     return (
         <div className='NoResults'>
-            <h2 className='NoResults__Title'>{props.t('No results found')}</h2>
+            <h2 className='NoResults__Title'>{props.t('No products found')}</h2>
             <img className='NoResults__Image' src={imageNoResults} alt='no results found'/>
-            <p className='NoResults__Text'>{props.text}</p>
         </div>
     );
 }

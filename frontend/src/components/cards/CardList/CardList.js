@@ -10,7 +10,6 @@ import ButtonIcon from '../../buttons/ButtonIcon';
 import AdvertChip from '../../adverts/AdvertChip';
 import CardImage from '../CardImage';
 import CardAvatar from '../CardAvatar';
-import CardTags from '../CardTags';
 // Own modules
 // Models
 import Advert from '../../../models/Advert';
@@ -23,9 +22,9 @@ import './styles.css';
 export default function CardList (props) {
     
     // Props destructuring
-    const { slug, name, thumbnail, tags, price, sold, type, booked, favorite, createdAt, user } = props.advert;
-    const { onFavoriteAdvert, onBookAdvert, onSellAdvert, onDeleteAdvert, onOpenChat, onEditAdvert } = props;
-    const { isMyAdvert, isLogin } = props;
+    const { slug, name, thumbnail, price, sold, type, booked, createdAt, user } = props.advert;
+    const { onBookAdvert, onSellAdvert, onDeleteAdvert, onEditAdvert } = props;
+    const { isMyAdvert } = props;
 
     // Render
     return(
@@ -40,18 +39,11 @@ export default function CardList (props) {
                     <div className='CardList__Content'>
                         <Link to={`/advert/${slug}`} className='CardList__Title'><h2>{name}</h2></Link>
                         <Moment className='CardList__Date' locale={i18n.language} fromNow>{createdAt}</Moment>
-                        <CardTags tags={tags} />
                     </div>
                     <div className='CardList__Footer'>
                         { !isMyAdvert &&
                             <CardAvatar login={user.login} name={user.name} avatar={user.avatar}/>
-                        }
-                        { !isMyAdvert && isLogin &&
-                            <div className='CardList__Buttons'>
-                                <ButtonIcon icon='chat' onClick={onOpenChat} />
-                                <ButtonIcon icon='favorite' active={favorite} onClick={onFavoriteAdvert} />
-                            </div>
-                        }
+                        } 
                         { isMyAdvert &&
                             <div className='CardList__Buttons'>
                                 <ButtonIcon icon='book' disabled={sold} active={booked} onClick={onBookAdvert} />
@@ -68,13 +60,10 @@ export default function CardList (props) {
 }
 
 CardList.propTypes = {
-    advert: PropTypes.instanceOf(Advert).isRequired,
-    onFavoriteAdvert: PropTypes.func,
-    onBookAdvert: PropTypes.func,
-    onSellAdvert: PropTypes.func,
-    onDeleteAdvert: PropTypes.func,
-    onOpenChat: PropTypes.func,
-    onEditAdvert: PropTypes.func,
-    isMyAdvert: PropTypes.bool,
-    isLogin: PropTypes.bool,
+  advert: PropTypes.instanceOf(Advert).isRequired,
+  onBookAdvert: PropTypes.func,
+  onSellAdvert: PropTypes.func,
+  onDeleteAdvert: PropTypes.func,
+  onEditAdvert: PropTypes.func,
+  isMyAdvert: PropTypes.bool
 }

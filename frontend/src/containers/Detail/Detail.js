@@ -23,7 +23,7 @@ import './styles.css';
 function Detail(props) {
 
     // Translate 
-    const { t, session, chats } = props;
+    const { t, session } = props;
 
     // Propiedades del index
     const { fetchAdvert, enqueueSnackbar } = props;
@@ -49,25 +49,6 @@ function Detail(props) {
         props.bookAdvert(advert.slug)
         .then (ad => setAdvert({...advert, booked: ad.booked, sold: ad.sold}))
         .catch(error => enqueueSnackbar(t('Error setting advert as booked ERROR', {error}), { variant: 'error' }));
-    }
-
-    // Marcar como favorito un anuncio  
-    const setFavoriteAdvert = () => {
-        props.setFavorite(advert.slug)
-        .then (ad => setAdvert({...advert, favorite: ad.favorite}))
-        .catch(error => enqueueSnackbar(t('Error adding advert to favorite ERROR', {error}), { variant: 'error' }));
-    }
-
-    // Open chat
-    const openChat = () => {
-        // Check first if already have a chat for that advert
-        const i = chats.findIndex(c => c.advert._id === advert._id);
-        if (i < 0 ) {
-            props.createChat(advert.slug)
-            .catch (error => enqueueSnackbar(t('Error opening a new chat session ERROR', {error}), { variant: 'error' }));
-        } else {
-            props.history.push(`/chats/${chats[i]._id}`);
-        }
     }
 
     // Borrar anuncio
@@ -103,9 +84,7 @@ function Detail(props) {
                             ownAdvert={advert.user._id === session._id}
                             onSellAdvert={setSellAdvert}
                             onBookAdvert={setBookAdvert}
-                            onFavoriteAdvert={setFavoriteAdvert}
                             onDeleteAdvert={deleteAdvertRequest}
-                            onOpenChat={openChat}
                         />
                     }
                 { props.error && <Error error={props.error}/>}

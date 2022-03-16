@@ -5,7 +5,6 @@ import moment from 'moment';
 // Material UI
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar'
-import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';

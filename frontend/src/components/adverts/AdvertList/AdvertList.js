@@ -23,7 +23,7 @@ const CARD_TYPES = {
 export default function AdvertList (props) {
     
     // Translate
-    const { onBookAdvert, onSellAdvert, onDeleteAdvert, onFavoriteAdvert, onOpenChat, onEditAdvert, t } = props;
+    const { onBookAdvert, onSellAdvert, onDeleteAdvert, onEditAdvert, t } = props;
     const { session, adverts, type, isLoading } = props;
 
     // Type of card to render
@@ -40,12 +40,10 @@ export default function AdvertList (props) {
                             onBookAdvert={onBookAdvert}
                             onSellAdvert={onSellAdvert}
                             onDeleteAdvert={onDeleteAdvert}
-                            onFavoriteAdvert={onFavoriteAdvert}
-                            onOpenChat={onOpenChat}
                             onEditAdvert={onEditAdvert}
                     />
             )}
-            { !isLoading && !adverts.length && <NoResults text={t('Sorry, we couldn\'t find any results matching the filter criteria')}/> }
+            { !isLoading && !adverts.length && <NoResults text={t('No products found')}/> }
             { isLoading && <Loading text={t('Loading adverts')}/> }
         </section>
     );
@@ -59,8 +57,6 @@ AdvertList.propTypes = {
     onBookAdvert: PropTypes.func, 
     onSellAdvert: PropTypes.func, 
     onDeleteAdvert: PropTypes.func, 
-    onFavoriteAdvert: PropTypes.func, 
-    onOpenChat: PropTypes.func, 
     onEditAdvert: PropTypes.func,
     t: PropTypes.func.isRequired,
 }

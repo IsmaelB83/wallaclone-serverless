@@ -1,6 +1,5 @@
 // Imports
 import * as ADVERTS from '../types/AdvertsTypes';
-import * as FILTERS from '../types/FiltersTypes';
 import * as SESSION from '../types/SessionTypes';
 import { initialState } from '../InitialState';
 
@@ -11,33 +10,19 @@ import { initialState } from '../InitialState';
  */
 export function ui(state = initialState.ui, action) {
     switch (action.type) {
-        // Filters related
-        case FILTERS.SET_FILTERS:
-            return { ...state, currentPage: 0 }
-        case FILTERS.SET_PAGE:
-            return { ...state, currentPage: action.pageNumber }
         // Feching related
         case ADVERTS.FETCH_ADVERT_FAILURE:
         case ADVERTS.FETCH_ADVERTS_FAILURE:
-        case ADVERTS.SEARCH_ADVERTS_FAILURE:
-        case ADVERTS.FETCH_ITERATE_ADVERTS_FAILURE:
-        case ADVERTS.FETCH_FAVORITES_FAILURE:
         case ADVERTS.FETCH_USER_ADVERTS_FAILURE:
         case ADVERTS.FETCH_SOLD_HISTORY_FAILURE:
             return { ...state, isFetching: false, error: action.error }
         case ADVERTS.FETCH_ADVERT_REQUEST:
         case ADVERTS.FETCH_ADVERTS_REQUEST:
-        case ADVERTS.SEARCH_ADVERTS_REQUEST:
-        case ADVERTS.FETCH_ITERATE_ADVERTS_REQUEST:
-        case ADVERTS.FETCH_FAVORITES_REQUEST:
         case ADVERTS.FETCH_USER_ADVERTS_REQUEST:
         case ADVERTS.FETCH_SOLD_HISTORY_REQUEST:
             return { ...state, isFetching: true, error: null }
         case ADVERTS.FETCH_ADVERT_SUCCESS:
         case ADVERTS.FETCH_ADVERTS_SUCCESS:
-        case ADVERTS.SEARCH_ADVERTS_SUCCESS:
-        case ADVERTS.FETCH_FAVORITES_SUCCESS:
-        case ADVERTS.FETCH_ITERATE_ADVERTS_SUCCESS:
         case ADVERTS.FETCH_USER_ADVERTS_SUCCESS:
         case ADVERTS.FETCH_SOLD_HISTORY_SUCCESS:
             return { ...state, currentPage: 0, isFetching: false, error: null }

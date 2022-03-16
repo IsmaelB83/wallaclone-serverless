@@ -13,18 +13,7 @@ const API_URL = `${process.env.REACT_APP_API_URL}/products`;
 * Objeto API
 */
 export default {
-    
-    /**
-    * Obtener todos los tags
-    */
-    getTags: () => {
-        // Endpoint
-        let baseURL = `${API_URL}/tags`;
-        // Call endpoint and return
-        return Axios.get(baseURL)
-        .then(res => res.data.results);
-    },
-    
+      
     /**
     * Obtener todos los anuncios
     */
@@ -52,39 +41,6 @@ export default {
         // Call endpoint and return
         return Axios.get(baseURL)
         .then(res => new Advert(res.data.result));
-    },
-    
-    /**
-    * Buscar por query generica
-    */
-    searchAdverts: (filters) => {
-        // Endpoint
-        let baseURL = `${API_URL}?`;
-        if (filters.name) baseURL =`${baseURL}name=${filters.name}&`;
-        if (filters.type && filters.type !== 'all') baseURL =`${baseURL}venta=${filters.type==='sell'?true:false}&`;
-        if (filters.tag && filters.tag !== 'all') baseURL =`${baseURL}tag=${filters.tag}&`;
-        const priceFrom = parseInt(filters.priceFrom);
-        const priceTo = parseInt(filters.priceTo);
-        if (priceFrom && !priceTo) {
-            baseURL =`${baseURL}price=${priceFrom}-`;
-        } else if (!priceFrom && priceTo) {
-            baseURL =`${baseURL}price=-${priceTo}&`;
-        } else if (priceFrom && priceTo) {
-            baseURL =`${baseURL}price=${priceFrom}-${priceTo}&`;
-        }
-        if (filters.user) baseURL = `${baseURL}user=${filters.user}&`
-        if (filters.skip && filters.skip > 0) baseURL = `${baseURL}skip=${filters.skip}&`
-        if (filters.limit && filters.limit > 0) baseURL = `${baseURL}limit=${filters.limit}&`
-        // Call endpoint and return
-        return Axios.get(baseURL)
-        .then(res => {
-            return {
-                end: res.data.end,
-                start: res.data.start,
-                totalCount: res.data.totalCount,
-                adverts:  res.data.results.map(advert => new Advert(advert))
-            }
-        });
     },
     
     /**
@@ -118,7 +74,6 @@ export default {
         formData.append('description', advert.description);
         formData.append('price', advert.price);
         formData.append('type', advert.type);
-        formData.append('tags', advert.tags);
         formData.append('photoFile', advert.file);
         // Config 
         const config = {
@@ -145,7 +100,6 @@ export default {
         formData.append('description', advert.description);
         formData.append('price', advert.price);
         formData.append('type', advert.type);
-        formData.append('tags', advert.tags);
         formData.append('booked', advert.booked);
         formData.append('sold', advert.sold);
         formData.append('photoFile', advert.file);

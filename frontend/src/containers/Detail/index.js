@@ -14,7 +14,6 @@ import { AdvertsActions, SessionActions } from '../../store/GlobalActions';
 const mapStateToProps = (state) => {
     return {
         session: state.session,
-        chats: state.chats,
         isFetching: state.ui.isFetching,
         error: state.ui.error
     }
@@ -28,7 +27,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         // Session
         logout: () => dispatch(SessionActions.logout()),
-        setFavorite: (slug) => dispatch(SessionActions.setFavorite(slug)),
         // Adverts
         fetchAdvert: (slug) => dispatch(AdvertsActions.fetchAdvert(slug)),
         bookAdvert: (slug) => dispatch(AdvertsActions.bookAdvert(slug)),

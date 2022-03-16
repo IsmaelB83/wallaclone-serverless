@@ -9,11 +9,9 @@ import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import ForumIcon from '@material-ui/icons/Forum';
 // Own Components
 import AdvertChip from '../AdvertChip';
 import CardImage from '../../cards/CardImage';
@@ -30,12 +28,9 @@ import './styles.css';
 export default function AdvertDetail(props) {
 
     // Props destructuring
-    const { slug, name, description, photo, tags, price, sold, booked, type, favorite, createdAt, user } = props.advert;
-    const { onFavoriteAdvert, onOpenChat, onBookAdvert, onSellAdvert, onDeleteAdvert, t } = props;
-    const { ownAdvert, isLogin } = props;
-
-    // Chip
-    const renderTags = () => tags.map((value,i) => <AdvertChip key={i} type='tag' value={value}/>);
+    const { slug, name, description, photo, price, sold, booked, type, createdAt, user } = props.advert;
+    const { onBookAdvert, onSellAdvert, onDeleteAdvert, t } = props;
+    const { ownAdvert } = props;
     
     // Render
     return (
@@ -48,7 +43,7 @@ export default function AdvertDetail(props) {
                     <FacebookShareButton url={window.location.href} quote={name}>
                         <FacebookIcon size={32} round={true} />
                     </FacebookShareButton>
-                    <TwitterShareButton url={window.location.href} title={name} hashtags={tags}>
+                    <TwitterShareButton url={window.location.href} title={name}>
                         <TwitterIcon size={32} round={true} />
                     </TwitterShareButton>
                     <WhatsappShareButton url={window.location.href}>
@@ -63,7 +58,6 @@ export default function AdvertDetail(props) {
                     <Moment className='AdvertDetail__Date' locale={i18n.language} fromNow>{createdAt}</Moment>
                 </div>
                 <p className='AdvertDetail__Description'>{description}</p>
-                <div className='AdvertDetail__Tags'>{renderTags()}</div>
                 <div className='AdvertDetail__Footer'>
                     <div className='AdvertDetail__AuthorAvatar'>
                         <Link to={`/published/${user.login}`} className=''>
@@ -77,20 +71,6 @@ export default function AdvertDetail(props) {
                 </div>
             </div>
             <div className='AdvertDetail__Buttons'>
-                {   !ownAdvert && isLogin &&
-                    <React.Fragment>
-                        <Button startIcon={<FavoriteIcon className={`FavoriteIcon FavoriteIcon--${favorite?'On':'White'}`}/>} 
-                                className='ButtonStandard ButtonStandard__Green Span2'
-                                onClick={onFavoriteAdvert}>
-                            {t('Favorite')}
-                        </Button>
-                        <Button startIcon={<ForumIcon/>} 
-                                className='ButtonStandard ButtonStandard__Green Span2'
-                                onClick={onOpenChat}>
-                            {t('Chat')}
-                        </Button>
-                    </React.Fragment>
-                }
                 {   ownAdvert && 
                     <React.Fragment>
                         <Button className='ButtonStandard ButtonStandard__Green Span2'
@@ -128,14 +108,11 @@ export default function AdvertDetail(props) {
 
 AdvertDetail.propTypes = {
   advert: PropTypes.instanceOf(Advert).isRequired,
-  onFavoriteAdvert: PropTypes.func.isRequired,
-  onOpenChat: PropTypes.func.isRequired,
   onBookAdvert: PropTypes.func.isRequired,
   onSellAdvert: PropTypes.func.isRequired,
   onDeleteAdvert: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   ownAdvert: PropTypes.bool,
-  isLogin: PropTypes.bool,
   error: PropTypes.string,
 }

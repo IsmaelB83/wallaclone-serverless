@@ -5,8 +5,7 @@ import { withNamespaces } from 'react-i18next';
 // Own Components
 import Home from './Home';
 // Own modules
-import { AdvertsActions, SessionActions, FiltersActions } from '../../store/GlobalActions';
-import { getVisibleAdverts } from '../../store/selectors/AdvertsSelectors';
+import { AdvertsActions, SessionActions } from '../../store/GlobalActions';
 
 
 /**
@@ -15,13 +14,9 @@ import { getVisibleAdverts } from '../../store/selectors/AdvertsSelectors';
  */
 const mapStateToProps = (state) => {
     return {
-        adverts: getVisibleAdverts(state.adverts, state.filters),
+        adverts: state.adverts,
         session: state.session,
-        chats: state.chats,
-        tags: state.tags,
-        ui: state.ui,
-        filters: state.filters,
-        lastCall: state.lastCall
+        ui: state.ui
     }
 }
 
@@ -31,18 +26,8 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
     return {
-        // Session
         logout: () => dispatch(SessionActions.logout()),
-        setFavorite: (slug) => dispatch(SessionActions.setFavorite(slug)),
-        // Filters
-        setFilters: filters => dispatch(FiltersActions.setFilters(filters)),
-        resetFilters: () => dispatch(FiltersActions.resetFilters()),
-        setCurrentPage: pageNumber => dispatch(FiltersActions.setCurrentPage(pageNumber)),
-        // Adverts
-        fetchTags: () => dispatch(AdvertsActions.fetchTags()),
         fetchAdverts: () => dispatch(AdvertsActions.fetchAdverts()),
-        fetchIterateAdverts: direction => dispatch(AdvertsActions.fetchIterateAdverts(direction)),
-        searchAdverts: filters => dispatch(AdvertsActions.searchAdverts(filters)),
     }
 }
 

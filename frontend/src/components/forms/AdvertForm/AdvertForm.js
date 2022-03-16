@@ -9,7 +9,6 @@ import Form from '../Form';
 import InputForm from '../InputForm';
 import SelectForm from '../SelectForm';
 import TextAreaForm from '../TextAreaForm';
-import SelectMultipleForm from '../SelectMultipleForm';
 // Models
 import { ADVERT_CONSTANTS } from '../../../models/Advert';
 // Own modules
@@ -58,7 +57,6 @@ export default function AdvertForm(props) {
             <div className='AdvertEditForm__Inputs'>
                 <SelectForm name='type' label={t('Type')} options={[ADVERT_CONSTANTS.TYPE.BUY, ADVERT_CONSTANTS.TYPE.SELL]} initial={ADVERT_CONSTANTS.TYPE.SELL} chip='type' required/>
                 <InputForm name='name' type='text' label={t('Name')} maxLength={"40"} required/>
-                <SelectMultipleForm name='tags' label={t('Tags')} options={props.tags} initial={[]} chip='tag' required/>
                 <InputForm name='price' type='number' label={t('Price')} required maxLength={10} endIcon={<EuroIcon/>}/>
                 <TextAreaForm name='description' label={t('Description')} placeholder={t('Enter an advert description')} maxLength={"150"} required rows={2}/>
             </div>

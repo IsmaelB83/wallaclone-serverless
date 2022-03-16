@@ -35,9 +35,7 @@ export default {
         name: 'Ismael',
         login: 'loken',
         email: 'ismaelbernal83@gmail.com',
-        avatar: '',
         token: '1234567890',
-        favorites: []
       });
     });
   },

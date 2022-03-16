@@ -12,17 +12,11 @@ export function adverts(state = initialState.adverts, action) {
     switch (action.type) {
         // Initialization
         case ADVERTS.FETCH_ADVERTS_FAILURE:
-        case ADVERTS.SEARCH_ADVERTS_FAILURE:
-        case ADVERTS.FETCH_ITERATE_ADVERTS_FAILURE:
-        case ADVERTS.FETCH_FAVORITES_FAILURE:
         case ADVERTS.FETCH_USER_ADVERTS_FAILURE:
         case ADVERTS.FETCH_SOLD_HISTORY_FAILURE:
             return initialState.adverts;
         // Adverts related
         case ADVERTS.FETCH_ADVERTS_SUCCESS:
-        case ADVERTS.SEARCH_ADVERTS_SUCCESS:
-        case ADVERTS.FETCH_ITERATE_ADVERTS_SUCCESS:
-        case ADVERTS.FETCH_FAVORITES_SUCCESS:
         case ADVERTS.FETCH_USER_ADVERTS_SUCCESS:
         case ADVERTS.FETCH_SOLD_HISTORY_SUCCESS:
             return [...action.adverts];
@@ -52,16 +46,6 @@ export function adverts(state = initialState.adverts, action) {
             const i = state.findIndex(advert => advert._id === action.advert._id);
             return [ ...state.slice(0, i), ...state.slice(i + 1) ];
         }
-        // Favorites related
-        case SESSION.SET_FAVORITE_SUCCESS: { 
-            const i = state.findIndex(ad => ad._id === action.advert._id);
-            if (i >= 0) {
-                const ad = {...state[i]};
-                ad.favorite = action.advert.favorite;
-                return [ ...state.slice(0, i), ad, ...state.slice(i + 1) ]
-            }
-            return state;
-        }  
         // Logout
         case SESSION.LOGOUT_SUCCESS:
         case SESSION.LOGOUT_FAILURE:
