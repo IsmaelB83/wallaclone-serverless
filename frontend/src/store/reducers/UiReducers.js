@@ -28,13 +28,9 @@ export function ui(state = initialState.ui, action) {
             return { ...state, currentPage: 0, isFetching: false, error: null }
         // Authention related
         case SESSION.LOGIN_REQUEST:
-        case SESSION.LOGIN_TOKEN_REQUEST:
             return { ...state, error: null, isAuthenticating: true }
-        case SESSION.LOGIN_FAILURE:
-        case SESSION.LOGIN_TOKEN_FAILURE:
-            return { ...state, error: action.error, isAuthenticating: false }
         case SESSION.LOGIN_SUCCESS:
-        case SESSION.LOGIN_TOKEN_SUCCESS:
+        case SESSION.LOGIN_FROM_STORAGE:
             return { ...state, error: null, isAuthenticating: false }
         // Edit related
         case ADVERTS.EDIT_ADVERT_REQUEST:
@@ -59,7 +55,6 @@ export function ui(state = initialState.ui, action) {
             return { ...state, isDeleting: false, error: null }
         // Logout
         case SESSION.LOGOUT_SUCCESS:
-        case SESSION.LOGOUT_FAILURE:
             return initialState.ui;
         // Default
         default:

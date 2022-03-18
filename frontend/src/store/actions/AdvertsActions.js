@@ -54,10 +54,10 @@ const fetchAdvertsSuccess = (adverts, totalCount, start, end) => ({ type: ACTION
 /**
 * Obtener anuncios de del usuario indicado
 */
-export const fetchUserAdverts = (login) => {   
+export const fetchUserAdverts = () => {   
   return async function(dispatch, getState, extra) {
     dispatch(fetchUserAdvertsRequest());
-    return AdvertServices.searchAdverts({user: login})
+    return AdvertServices.userProducts(getState().session.jwt)
     .then(response => {
       dispatch(fetchUserAdvertsSuccess(response.adverts, response.totalCount, response.start, response.end));
       return response;

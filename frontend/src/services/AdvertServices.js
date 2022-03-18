@@ -46,6 +46,24 @@ export default {
     /**
     * Returns all sales adverts for a specific user
     */
+    userProducts: (jwt) => {
+        // Endpoint
+        let baseURL = `${API_URL}/sold`;
+        // Call endpoint and return
+        return Axios.get(baseURL, { headers: { 'Authorization': `Bearer ${jwt}`}})
+        .then(res => {
+            return {
+                end: res.data.end,
+                start: res.data.start,
+                totalCount: res.data.totalCount,
+                adverts: res.data.results.map(advert => new Advert(advert))
+            }
+        });
+    },
+
+    /**
+    * Returns all sales adverts for a specific user
+    */
     soldHistory: (jwt) => {
         // Endpoint
         let baseURL = `${API_URL}/sold`;

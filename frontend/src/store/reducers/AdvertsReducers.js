@@ -8,7 +8,7 @@ import { initialState } from '../InitialState';
  * @param {Array} state Anuncios
  * @param {Object} action Action
  */
-export function adverts(state = initialState.adverts, action) {
+export function adverts (state = initialState.adverts, action) {
     switch (action.type) {
         // Initialization
         case ADVERTS.FETCH_ADVERTS_FAILURE:
@@ -46,9 +46,9 @@ export function adverts(state = initialState.adverts, action) {
             const i = state.findIndex(advert => advert._id === action.advert._id);
             return [ ...state.slice(0, i), ...state.slice(i + 1) ];
         }
-        // Logout
+        // Logout or request login to auth0
         case SESSION.LOGOUT_SUCCESS:
-        case SESSION.LOGOUT_FAILURE:
+        case SESSION.LOGIN_REQUEST:
             return initialState.adverts;
         // Default
         default:

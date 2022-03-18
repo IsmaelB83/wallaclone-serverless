@@ -1,67 +1,44 @@
-// NPM Modules
-import Axios from 'axios';
-import Querystring from 'querystring';
-// Material UI
-// Own modules
-import Session from '../models/Session';
-// Assets
-// CSS
+// Node modules
+import auth0 from 'auth0-js';
 
-// Endpoint
-const API_URL = `${process.env.REACT_APP_API_URL}/authenticate`;
-
-/**
-* Objeto API
-*/
-export default {
-  
-  /**
-  * Trata de hacer login contra el API
-  */
-  login: (login, password) => {
-    // Endpoint
-    let baseURL = `${API_URL}`;
-    // Call endpoint and return
-    return Axios.post(
-      baseURL, 
-      Querystring.stringify({ login, password }),
-      { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-    )
-    .then(res => new Session(res.data.user))
-    .catch(err => {
-      console.log(err)
-      return new Session({
-        _id: 'loken',
-        name: 'Ismael',
-        login: 'loken',
-        email: 'ismaelbernal83@gmail.com',
-        token: '1234567890',
-      });
+// Class to ineract with Auth0 services
+export default class AuthServices {
+    
+    // Integratino with auth0
+    auth0 = new auth0.WebAuth({
+        domain: 'dev-wbbbogs3.us.auth0.com',              // Auth0 domain
+        clientID: 'yIKjkEIUrCZ70Pw0zYXl3QkHTdMyLHmA',     // Auth0 client id
+        redirectUri: 'http://localhost:3000/callback',    // Callback url in frontend
+        responseType: 'token id_token',
+        scope: 'openid'
     });
-  },
-
-  /**
-  * Trata de hacer login contra el API
-  */
-  loginWithToken: (jwt) => {
-    // Endpoint
-    let baseURL = `${API_URL}/token`;
-    // Call endpoint and return
-    return Axios.post(baseURL,  { headers: { 'Authorization': `Bearer ${jwt}`}})
-    .then(res => new Session(res.data.user));
-  },
-
-  /**
-  * Trata de hacer login contra el API
-  */
-  logout: (jwt) => {
-    // Endpoint
-    let baseURL = `${API_URL}/logout`;
-    // Call endpoint and return
-    return Axios.post(
-      baseURL, 
-      { headers: { 'Authorization': `Bearer ${jwt}`} }
-    )
-    .then(res => 'JWT invalidated');
-  }
+    
+    // Constructor
+    constructor() {       
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.handleAuthentication = this.handleAuthentication.bind(this);
+    }
+    
+    // Request login to auth0
+    login() {
+        this.auth0.authorize();
+    }
+    
+    // Logout from auth0
+    logout() {
+        this.auth0.logout({ return_to: window.location.origin });
+    }
+    
+    // Handle authentication and callback with results
+    handleAuthentication(callback) {
+        this.auth0.parseHash((err, authResult) => {
+            if (authResult && authResult.accessToken && authResult.idToken) {
+                callback(null, authResult);
+            } else if (err) {
+                console.log(err);
+                callback(err, null);
+            }
+        });
+    }
 }

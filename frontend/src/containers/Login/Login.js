@@ -18,9 +18,8 @@ function Login(props) {
       
     // Dispatch login action
     const submitLogin = (inputs) => {
-        const { login, password } = inputs;
-        props.login(login, password)
-        .then(res => enqueueSnackbar(t('Redirecting home...'), { variant: 'info' }))
+        props.loginRequest()
+        .then(res => enqueueSnackbar(t('Redirecting auth0...'), { variant: 'info' }))
         .catch(error => enqueueSnackbar(error, { variant: 'error', }));
     }
     

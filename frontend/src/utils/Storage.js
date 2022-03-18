@@ -13,7 +13,7 @@ const LocalStorage = {
      * Salvar sesión en local storage
      */
     saveLocalStorage: (session) => {
-        if (session.name) {
+        if (session.user) {
             localStorage.setItem(process.env.REACT_APP_LOCALSTORAGE_ID, JSON.stringify(session));
         }
     },

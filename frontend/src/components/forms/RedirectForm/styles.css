@@ -33,11 +33,6 @@ x
     max-width: 70%;
 }
 
-.Login_Auth0 {
-    max-height: 125px;
-    width: auto;
-}
-
 @media only screen and (min-width: 600px) {
     .Login__Wrapper {
         max-width: 400px;

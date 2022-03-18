@@ -8,7 +8,6 @@ import SectionList from './SectionList';
 // Own modules
 import { AdvertsActions, SessionActions } from '../../store/GlobalActions';
 
-
 /**
  * Inyecta props en mi componente para acceder al state del store
  * @param {Object} state Estado de mi store
@@ -33,7 +32,7 @@ const mapDispatchToProps = (dispatch) => {
         deleteAdvert: slug => dispatch(AdvertsActions.deleteAdvert(slug)),
         bookAdvert: slug => dispatch(AdvertsActions.bookAdvert(slug)),
         sellAdvert: slug => dispatch(AdvertsActions.sellAdvert(slug)),
-        fetchUserAdverts: slug => dispatch(AdvertsActions.fetchUserAdverts(slug)),
+        fetchUserAdverts: () => dispatch(AdvertsActions.fetchUserAdverts()),
         fetchSoldHistory: () => dispatch(AdvertsActions.fetchSoldHistory()),
     }
 }

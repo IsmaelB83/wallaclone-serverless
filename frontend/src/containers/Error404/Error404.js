@@ -14,13 +14,18 @@ import './styles.css';
  * Functional component to render 404 error
  */
 export default function Error404(props) {
-  return (
-    <React.Fragment>
-        <NavBar session={props.session} onLogout={props.logout}/>
-        <Container className='Container'>
-            <Error type='404'/>
-        </Container>
-        <Footer session={props.session} onLogout={props.logout}/>
-    </React.Fragment>
-  );
+
+    // Props destructuring
+    const { session, logout } = props;
+
+    // Render
+    return (
+        <React.Fragment>
+            <NavBar session={session} onLogout={logout}/>
+            <Container className='Container'>
+                <Error type='404'/>
+            </Container>
+            <Footer session={session} onLogout={logout}/>
+        </React.Fragment>
+    );
 }

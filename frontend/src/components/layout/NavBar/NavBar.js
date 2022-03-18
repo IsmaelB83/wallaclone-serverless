@@ -52,7 +52,7 @@ export default function NavBar(props) {
                             <LanguageIcon fontSize='small' />
                             <span>{language==='en'?'es':'en'}</span>
                         </MenuItem>
-                        { props.session && props.session.email &&
+                        { props.session && props.session.user && 
                             <React.Fragment>
                                 <MenuItem className='Navbar__MenuItem' component={Link} to='/advert/create'>
                                     <AddPhotoAlternateIcon fontSize='small'/>
@@ -64,7 +64,7 @@ export default function NavBar(props) {
                                 </MenuItem>
                             </React.Fragment>
                         }
-                        { !props.session.email &&
+                        { ( !props.session || !props.session.user ) &&
                             <MenuItem className='Navbar__MenuItem' component={Link} to='/login'>
                                 <PermIdentityIcon fontSize='small' />
                                 <span>{t('login')}</span>

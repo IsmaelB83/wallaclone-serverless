@@ -22,7 +22,7 @@ import './styles.css';
 function Edit(props) {
 
     // Props destructuring
-    const { enqueueSnackbar, fetchAdvert, mode, t} = props;
+    const { enqueueSnackbar, fetchAdvert, mode, session, t} = props;
     const { slug } = props.match.params;
     const { isFetching, isUpdating, isCreating, error } = props.ui;
 
@@ -61,7 +61,7 @@ function Edit(props) {
     // Render
     return (
         <React.Fragment>
-            <NavBar session={props.session} onLogout={props.logout}/>
+            <NavBar session={session} onLogout={props.logout}/>
             <Container className='Container'>
                 <main className='Section__Wrapper Edit'>
                     <HeaderAdvertEdit mode={mode}/>
@@ -78,7 +78,7 @@ function Edit(props) {
                     { error && <Error error={error}/> }
                 </main>
             </Container>
-            <Footer session={props.session} onLogout={props.logout}/>
+            <Footer session={session} onLogout={props.logout}/>
         </React.Fragment>
     );
 }

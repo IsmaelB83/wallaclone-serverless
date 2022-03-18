@@ -10,12 +10,11 @@ import Form from '../Form';
 // Assets
 import imageLogo from '../../../assets/images/logo_large.png';
 import imageSpinner from '../../../assets/images/spinner.gif';
-import imageAuth0 from '../../../assets/images/auth0.png';
 // CSS
 import './styles.css';
 
 // Componente para renderizar cualquiera de los formularios de la sección de autenticación:
-export default function AuthForm(props) {  
+export default function RedirectForm(props) {  
     const { t } = props;
     const submit = (inputs) => props.onSubmit(inputs);
     return (
@@ -28,14 +27,10 @@ export default function AuthForm(props) {
                         </div>
                     </Link>
                     <div>
+                      <input name='username' autoComplete='username' hidden></input>
                       <div className='Login__Buttons'>
                           <Button className='Button' type='submit' variant='contained' color='primary'>{t('Login with Auth0')}</Button>
                       </div>
-                    </div>
-                    <div>
-                        <div className='Login__ImageWrapper'>
-                            <img src={imageAuth0} className='Login_Auth0' alt='auth0-logo' />
-                        </div>
                     </div>
                     <div className='LoadingSmall'>
                     { props.isLoading && <img src={imageSpinner} className='LoadingSmall__Spinner' alt='spinner'/> }

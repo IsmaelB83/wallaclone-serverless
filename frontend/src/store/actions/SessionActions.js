@@ -2,90 +2,72 @@
 import AuthServices from '../../services/AuthServices';
 // Own modules
 import LocalStorage from '../../utils/Storage';
+import Session from '../../models/Session';
 // Actions
 import * as ACTIONS from '../types/SessionTypes';
 
+// Constants
+const authServices = new AuthServices();
+
 /**
- * Login con usuario y password
- * @param {String} login Login del usuario
- * @param {String} password Password del usuario
- */
-export const login = (login, password) => {   
+* LoginRequest to auth
+* @param {String} login Login del usuario
+* @param {String} password Password del usuario
+*/
+export const loginRequest = () => {
+    return async function(dispatch, getState, extra) { 
+        dispatch(loginRequestAction())
+        return authServices.login()
+    }
+}
+
+const loginRequestAction = () => ({ type: ACTIONS.LOGIN_REQUEST });
+
+/**
+* Login redirect from auth0
+* @param {String} login Login del usuario
+* @param {String} password Password del usuario
+*/
+export const loginRedirect = jwt => {  
     return async function(dispatch, getState, extra) {
-        dispatch(loginRequest());
-        return AuthServices.login(login, password)
-        .then(response => {
-            dispatch(loginSuccess(response));
-            LocalStorage.saveLocalStorage(getState().session);
-            // go home
-            extra.history.push('/');
-            return response;
+        authServices.handleAuthentication((err, authResult) => {
+            if (err) {
+                alert(`Error: ${err.error}. Check the console for further details.`);
+                return extra.history.push('/login');
+            }
+            const session = new Session (authResult.expiresIn, authResult.idToken, authResult.idTokenPayload.sub);
+            dispatch(loginRedirectAction(session));
+            LocalStorage.saveLocalStorage(session);
+            return extra.history.push('/');
         })
-        .catch (error => {
-            let message = error.response && error.response.data ? error.response.data.data : error.message;
-            dispatch(loginFailure(message));
-            throw message;
-        });
+
     }
 };
 
-const loginRequest = () => ({ type: ACTIONS.LOGIN_REQUEST });
-const loginSuccess = session => ({ type: ACTIONS.LOGIN_SUCCESS, session });
-const loginFailure = error => ({ type: ACTIONS.LOGIN_FAILURE, error });
+const loginRedirectAction = session => ({ type: ACTIONS.LOGIN_SUCCESS, session });
 
 /**
- * Login con token
- */
-export const loginWithToken = (jwt) => {   
+* Login with token from local storage (validate first in backend)
+*/
+export const loginFromStorage = jwt => {   
     return async function(dispatch, getState, extra) {
-        dispatch(loginWithTokenRequest());
-        return AuthServices.loginWithToken(jwt)
-        .then(response => {
-            // Distpatch login and save in local storage
-            dispatch(loginWithTokenSuccess(response));
-            LocalStorage.saveLocalStorage(getState().session);
-            // go home
-            extra.history.push('/');
-            return response;
-        })
-        .catch (error => {
-            LocalStorage.cleanLocalStorage();
-            let message = error.response && error.response.data ? error.response.data.data : error.message;
-            dispatch(loginWithTokenFailure(message));
-            throw message;
-        });
+        const session = new Session (jwt);
+        dispatch(loginFromStorageAction(session));
+        return { type: ACTIONS.LOGIN_FROM_STORAGE, session }
     }
 };
 
-const loginWithTokenRequest = () => ({ type: ACTIONS.LOGIN_TOKEN_REQUEST });
-const loginWithTokenSuccess = session => ({ type: ACTIONS.LOGIN_TOKEN_SUCCESS, session });
-const loginWithTokenFailure = error => ({ type: ACTIONS.LOGIN_TOKEN_FAILURE, error });
+const loginFromStorageAction = session => ({ type: ACTIONS.LOGIN_FROM_STORAGE, session });
 
 /**
- * Logout
- */
+* Logout
+*/
 export const logout = () => {
     return async function(dispatch, getState, extra) {
-        dispatch(logoutRequest());
-        return AuthServices.logout(getState().session.jwt)
-        .then(response => {
-            // distpatch logout and clear local storage
-            dispatch(logoutSuccess());
-            LocalStorage.cleanLocalStorage();
-            // go login
-            extra.history.push('/login');
-            return response;
-        })
-        .catch (error => {
-            let message = error.response && error.response.data ? error.response.data.data : error.message;
-            dispatch(logoutFailure(message));
-            LocalStorage.cleanLocalStorage();
-            extra.history.push('/login');
-            throw message;
-        });
+        dispatch(logoutAction());
+        authServices.logout()
+        LocalStorage.cleanLocalStorage();
     }
 };
 
-const logoutRequest = () => ({ type: ACTIONS.LOGOUT_REQUEST });
-const logoutSuccess = () => ({ type: ACTIONS.LOGOUT_SUCCESS });
-const logoutFailure = error => ({ type: ACTIONS.LOGOUT_FAILURE, error });
+const logoutAction = () => ({ type: ACTIONS.LOGOUT_SUCCESS })

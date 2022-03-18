@@ -33,7 +33,7 @@ function Home(props) {
     // Render
     return (
         <React.Fragment>
-            <NavBar session={props.session} onLogout={props.logout}/>
+            <NavBar session={session} onLogout={props.logout}/>
             <Container className='Container'>
                 <main className='Section__Wrapper'>
                     <div className='Home__Results'>
@@ -48,7 +48,7 @@ function Home(props) {
                     </div>
                 </main>
             </Container>
-            <Footer session={props.session} onLogout={props.logout} active='Home'/>
+            <Footer session={session} onLogout={props.logout} active='Home'/>
         </React.Fragment>
     );
 }

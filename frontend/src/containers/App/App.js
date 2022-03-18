@@ -10,6 +10,7 @@ import SectionList from '../SectionList';
 import Detail from '../Detail';
 import Edit from '../Edit';
 import Login from '../Login';
+import Callback from '../Callback';
 import Home from '../Home';
 import Error404 from '../Error404';
 // Own modules
@@ -27,7 +28,7 @@ export default function App(props) {
     // Destructure props
     const { enqueueSnackbar, t } = props;
     
-    // Session storage
+    // Session from local storage
     const session = LocalStorage.readLocalStorage();
     // Configuro el store, y sincronizo el history del store con el de router
     const store = configureStore(initialState);
@@ -35,7 +36,7 @@ export default function App(props) {
     // Dispatch login in case of session in local storage
     useEffect(() => {
         if (session && session.jwt) {
-            store.dispatch(SessionActions.loginWithToken(session.jwt))
+            store.dispatch(SessionActions.loginFromStorage(session.jwt))
             .catch (error => enqueueSnackbar(error, { variant: 'error', }));
         }
     }, [store, session, enqueueSnackbar, t]);
@@ -46,10 +47,11 @@ export default function App(props) {
             <ConnectedRouter history={history}>
                 <Switch>
                     <Route path='/login' exact component={Login} />
-                    <Route path='/published/:login' exact render={(props) => <SectionList {...props} listType='published'/>}/>
+                    <PrivateRoute path='/published' exact render={(props) => <SectionList {...props} listType='published'/>}/>
                     <PrivateRoute path='/history' exact render={(props) => <SectionList {...props} listType='history'/>}/>
                     <PrivateRoute path='/advert/create' exact render={(props) => <Edit {...props} mode='create'/>}/>
                     <PrivateRoute path='/advert/edit/:slug' exact render={(props) => <Edit {...props} mode='edit'/>}/>
+                    <Route path='/callback' exact component={Callback} />
                     <Route path='/advert/:slug' exact component={Detail} />
                     <Route path='/' exact component={Home} />
                     <Route component={Error404} />

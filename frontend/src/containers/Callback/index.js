@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { withSnackbar } from 'notistack';
 // Own components
-import Login from './Login';
+import Callback from './Callback';
 // Own modules
 import { SessionActions } from '../../store/GlobalActions';
 
@@ -23,9 +23,9 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
     return {
-        loginRequest: () => dispatch(SessionActions.loginRequest())
+        loginRedirect: token => dispatch(SessionActions.loginRedirect(token))
     }
 }
 
 // Retorno el componente envuelto en el "connect" y en un withSnackBar (para los mensajes de info de la app)
-export default connect(mapStateToProps, mapDispatchToProps)(withSnackbar(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(withSnackbar(Callback));

@@ -1,5 +1,4 @@
 // Models
-import User from './User';
 
 // Constantes para el trabajo con el modelo de anuncio
 export const ADVERT_CONSTANTS = {
@@ -26,6 +25,7 @@ export const EMPTY_ADVERT = {
     booked: false,
     sold: false,
     createdAt: undefined,
+    user: ''
 }
 
 /**
@@ -48,9 +48,7 @@ export default class Advert {
         this.photo = ad.photo;
         this.booked = ad.booked;
         this.sold = ad.sold;
-        if (ad.user) {
-            this.user = new User(ad.user);
-        }        
+        this.user = ad.user;  
     }
 
     /**

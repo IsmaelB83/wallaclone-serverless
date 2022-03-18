@@ -80,8 +80,8 @@ function Detail(props) {
                     { !props.isFetching && advert && 
                         <AdvertDetail
                             advert={advert}
-                            isLogin={session._id !== undefined}
-                            ownAdvert={advert.user._id === session._id}
+                            isLogin={session.user !== undefined}
+                            ownAdvert={advert.user === session.user}
                             onSellAdvert={setSellAdvert}
                             onBookAdvert={setBookAdvert}
                             onDeleteAdvert={deleteAdvertRequest}

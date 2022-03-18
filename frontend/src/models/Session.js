@@ -7,14 +7,17 @@
 // Modelo sesión de usuario
 export default class Session {
     
-    /** Constructor
-     * @param {Object} Session 
-     */    
-    constructor(user) {
-        this._id = user._id;
-        this.login = user.login;
-        this.name = user.name;
-        this.email = user.email;
-        this.jwt = user.token;
+    /**
+     * Constructor of a session object
+     * @param {String} token JWT of current session
+     */
+    constructor(expiresIn, jwt, id) {
+        this.expiresAt = (expiresIn * 1000) + new Date().getTime();;
+        this.jwt = jwt;
+        this.user = id;
+    }
+
+    isAuthenticated() {
+        return new Date().getTime() < this.expiresAt;
     }
 }

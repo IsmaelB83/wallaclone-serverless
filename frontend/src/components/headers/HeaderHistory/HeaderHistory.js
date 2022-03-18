@@ -17,7 +17,7 @@ export default function HeaderHistory(props) {
                 <h1 className='Title'>{props.t('Your sales')}</h1>
                 <p className='Counter'><span>{props.totalCount}</span> {props.t('products')}</p>
             </div>
-            <p className='Text'>{props.t('Here you can follow up all the products that you have included in your favorites')}</p>
+            <p className='Text'>{props.t('Here you can follow up all the products that you have sold')}</p>
         </div>
     );
 }
