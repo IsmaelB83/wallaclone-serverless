@@ -24,7 +24,7 @@ export default function Footer(props) {
     return (
         <footer title='Wallaclone' className='Footer'>
             <Container>
-            { props.session && props.session.user &&
+            { props.session && props.session.userId &&
                 <div className='Footer__Menu'>
                     <MenuItem className={`Footer__MenuItem ${active==='Home'?'Footer__MenuItem--active':''}`} component={Link} to='/'>
                         <HomeIcon fontSize='small' />
@@ -40,7 +40,7 @@ export default function Footer(props) {
                     </MenuItem>
                 </div>
             }
-            { ( !props.session || !props.session.user ) &&
+            { ( !props.session || !props.session.userId ) &&
                 <div className='Footer__Content'>
                     <div className='SocialLinks'>
                         <a className='SocialLinks__link SocialLinks__link--github' href='https://github.com/IsmaelB83'><GitHubIcon /></a>

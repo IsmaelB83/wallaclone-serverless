@@ -13,8 +13,8 @@ const LocalStorage = {
      * Salvar sesión en local storage
      */
     saveLocalStorage: (session) => {
-        if (session.user) {
-            localStorage.setItem(process.env.REACT_APP_LOCALSTORAGE_ID, JSON.stringify(session));
+        if (session.userId) {
+            localStorage.setItem('wallaclone-serverless', JSON.stringify(session));
         }
     },
 
@@ -23,7 +23,7 @@ const LocalStorage = {
      */
     readLocalStorage: () => {
         try {
-            const session = localStorage.getItem(process.env.REACT_APP_LOCALSTORAGE_ID);
+            const session = localStorage.getItem('wallaclone-serverless');
             return JSON.parse(session)               
         } catch (error) {
             localStorage.clear();

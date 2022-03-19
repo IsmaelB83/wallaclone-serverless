@@ -7,10 +7,10 @@ const withAdvertActions = (WrappedComponent) => {
     return class AdvertWithActions extends Component {
 
         // Acciones posibles sobre el anuncio
-        sellAdvert = () => this.props.onSellAdvert(this.props.advert.slug);
-        bookAdvert = () => this.props.onBookAdvert(this.props.advert.slug);
-        deleteAdvert = () => this.props.onDeleteAdvert(this.props.advert.slug);
-        editAdvert = () => this.props.onEditAdvert(this.props.advert.slug);
+        sellAdvert = () => this.props.onSellAdvert(this.props.advert.productId);
+        bookAdvert = () => this.props.onBookAdvert(this.props.advert.productId);
+        deleteAdvert = () => this.props.onDeleteAdvert(this.props.advert.productId);
+        editAdvert = () => this.props.onEditAdvert(this.props.advert.productId);
 
         render() { 
             return <WrappedComponent 

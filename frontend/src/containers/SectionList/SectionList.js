@@ -46,37 +46,37 @@ export default function SectionList (props) {
     }, [listType, fetchSoldHistory, fetchUserAdverts, enqueueSnackbar, login, sessionLogin, t]);
 
     // Reservado
-    const bookAdvertHandler = slug => {
-        bookAdvert(slug).catch(error => enqueueSnackbar(t('Error setting advert as booked ERROR', {error}), { variant: 'error' }));
+    const bookAdvertHandler = productId => {
+        bookAdvert(productId).catch(error => enqueueSnackbar(t('Error setting advert as booked ERROR', {error}), { variant: 'error' }));
     };
 
     // Vendido
-    const sellAdvertHandler = slug => {
-        sellAdvert(slug).catch(error => enqueueSnackbar(t('Error setting advert as sold ERROR', {error}), { variant: 'error', }));
+    const sellAdvertHandler = productId => {
+        sellAdvert(productId).catch(error => enqueueSnackbar(t('Error setting advert as sold ERROR', {error}), { variant: 'error', }));
     };
 
     // Edit Advert
-    const editAdvertHandler = slug => history.push(`/advert/edit/${slug}`);
+    const editAdvertHandler = productId => history.push(`/advert/edit/${productId}`);
 
     // Borrar anuncio
     const [showModalDelete, setShowModalDelete] = useState(false);
-    const [slug, setSlug] = useState(undefined);
-    const deleteAdvertRequestHandler = slug => {
-        setSlug(slug)
+    const [productId, setProductId] = useState(undefined);
+    const deleteAdvertRequestHandler = productId => {
+        setProductId(productId)
         setShowModalDelete(true);
     }
     const confirmDeleteAdvert = () => {
         setShowModalDelete(false);
-        if (slug) {
-            deleteAdvert(slug)
-            .then(res => enqueueSnackbar(t('Advert SLUG deleted', {slug}), { variant: 'success', }))
+        if (productId) {
+            deleteAdvert(productId)
+            .then(res => enqueueSnackbar(t('Advert X deleted', {id: productId}), { variant: 'success', }))
             .catch(error => enqueueSnackbar(t('Error deleting advert ERROR', {error}), { variant: 'error', }));    
         } else {
             enqueueSnackbar(t('Error identifying advert to be deleted'), { variant: 'error', });    
         }
     };
     const cancelDeleteAdvert = () => {
-        setSlug(undefined)
+        setProductId(undefined)
         setShowModalDelete(false);
     };
    
@@ -96,7 +96,6 @@ export default function SectionList (props) {
                         onBookAdvert={bookAdvertHandler}
                         onSellAdvert={sellAdvertHandler}
                         onDeleteAdvert={deleteAdvertRequestHandler}
-                        onSetCurrentPage={setCurrentPage}
                         onEditAdvert={editAdvertHandler}
                     />
                 </main>

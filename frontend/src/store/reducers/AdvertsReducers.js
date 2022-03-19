@@ -23,14 +23,14 @@ export function adverts (state = initialState.adverts, action) {
         case ADVERTS.CREATE_ADVERT_SUCCESS:
             return [action.advert, ...state];
         case ADVERTS.EDIT_ADVERT_SUCCESS: {
-            const i = state.findIndex(ad => ad._id === action.advert._id);
+            const i = state.findIndex(ad => ad.productId === action.advert.productId);
             if (i >= 0) {
                 return [ ...state.slice(0, i), action.advert, ...state.slice(i + 1) ]
             }
             return state;
         }
         case ADVERTS.BOOK_ADVERT_SUCCESS: {
-            const i = state.findIndex(ad => ad._id === action.advert._id);
+            const i = state.findIndex(ad => ad.productId === action.advert.productId);
             if (i >= 0) {
                 const ad = {...state[i]};
                 ad.booked = action.advert.booked;
@@ -39,11 +39,11 @@ export function adverts (state = initialState.adverts, action) {
             return state;
         }        
         case ADVERTS.SELL_ADVERT_SUCCESS:  {
-            const i = state.findIndex(advert => advert._id === action.advert._id);
+            const i = state.findIndex(advert => advert.productId === action.advert.productId);
             return [ ...state.slice(0, i), ...state.slice(i + 1) ];
         }
         case ADVERTS.DELETE_ADVERT_SUCCESS: {
-            const i = state.findIndex(advert => advert._id === action.advert._id);
+            const i = state.findIndex(advert => advert.productId === action.advert.productId);
             return [ ...state.slice(0, i), ...state.slice(i + 1) ];
         }
         // Logout or request login to auth0

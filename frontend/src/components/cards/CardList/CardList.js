@@ -22,22 +22,22 @@ import './styles.css';
 export default function CardList (props) {
     
     // Props destructuring
-    const { slug, name, thumbnail, price, sold, type, booked, createdAt, user } = props.advert;
+    const { productId, name, thumbnail, price, sold, type, booked, createdAt, user } = props.advert;
     const { onBookAdvert, onSellAdvert, onDeleteAdvert, onEditAdvert } = props;
     const { isMyAdvert } = props;
 
     // Render
     return(
         <React.Fragment>
-            <article id={`adslug_${slug}`} className='CardList'>
+            <article id={`adslug_${productId}`} className='CardList'>
                 <header className='CardList__Header'>
-                    <CardImage slug={slug} sold={sold} booked={booked} photo={thumbnail}/>
+                    <CardImage productId={productId} sold={sold} booked={booked} photo={thumbnail}/>
                     <p className='CardList__Price'>{price} €</p>
                     <AdvertChip type='type' value={type}/>
                 </header>
                 <div className='CardList__Body'>
                     <div className='CardList__Content'>
-                        <Link to={`/advert/${slug}`} className='CardList__Title'><h2>{name}</h2></Link>
+                        <Link to={`/advert/${productId}`} className='CardList__Title'><h2>{name}</h2></Link>
                         <Moment className='CardList__Date' locale={i18n.language} fromNow>{createdAt}</Moment>
                     </div>
                     <div className='CardList__Footer'>

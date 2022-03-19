@@ -23,20 +23,20 @@ function Edit(props) {
 
     // Props destructuring
     const { enqueueSnackbar, fetchAdvert, mode, session, t} = props;
-    const { slug } = props.match.params;
+    const { productId } = props.match.params;
     const { isFetching, isUpdating, isCreating, error } = props.ui;
 
     // Load inicial
     const [ advert, setAdvert ] = useState();
     useEffect(() => {
         if (mode === 'edit') {
-            fetchAdvert(slug)
+            fetchAdvert(productId)
             .then (advert => setAdvert(advert))
             .catch(error  => enqueueSnackbar(t('Error fetching advert ERROR', {error}), { variant: 'error' }));
         } else {
             setAdvert(new Advert(EMPTY_ADVERT))
         }
-    }, [fetchAdvert, slug, mode, enqueueSnackbar, t])
+    }, [fetchAdvert, productId, mode, enqueueSnackbar, t])
 
     // Manejador del submit del formulario
     const submitAdvert = (inputs) => {
@@ -48,11 +48,11 @@ function Edit(props) {
             // Lanzando operacion al backend
             if (mode === 'create') {
                 props.createAdvert(newAdvert)
-                .then (res => enqueueSnackbar(t('Advert X created', { slug: res.slug}), { variant: 'success' }))
+                .then (res => enqueueSnackbar(t('Advert X created', { id: res.productId}), { variant: 'success' }))
                 .catch(error => enqueueSnackbar(t('Error creating advert ERROR', {error}), { variant: 'error' }));
             } else {
                 props.editAdvert(newAdvert)
-                .then (res => enqueueSnackbar(t('Advert X updated', {slug: res.slug}), { variant: 'success' }))
+                .then (res => enqueueSnackbar(t('Advert X updated', {id: res.productId}), { variant: 'success' }))
                 .catch(error => enqueueSnackbar(t('Error updating advert ERROR', {error}), { variant: 'error' }));
             }
         } 

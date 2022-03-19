@@ -4,5 +4,4 @@ export interface ProductUpdate {
   price: number
   type: string
   photoUrl: string
-  tag: string
 }

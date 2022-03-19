@@ -73,6 +73,38 @@
             method: get
             path: products
             cors: true
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GetProducts-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Scan
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+
+    GetUserProducts:
+      handler: src/lambda/http/products/getUserProducts.handler
+      events:
+        - http:
+            method: get
+            path: products/user
+            cors: true
+            authorizer: Auth
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GetProducts-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+
+    GetHistoryUser:
+      handler: src/lambda/http/products/getHistoryUser.handler
+      events:
+        - http:
+            method: get
+            path: products/history
+            cors: true
             authorizer: Auth
       iamRoleStatementsInherit: true
       iamRoleStatementsName: GetProducts-Lambda-role
@@ -90,7 +122,6 @@
             method: get
             path: products/{productId}
             cors: true
-            authorizer: Auth
       iamRoleStatementsInherit: true
       iamRoleStatementsName: GetProduct-Lambda-role
       iamRoleStatements:

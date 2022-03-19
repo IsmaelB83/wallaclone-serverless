@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
         // Session
         logout: () => dispatch(SessionActions.logout()),
         // Adverts
-        fetchAdvert: (slug) => dispatch(AdvertsActions.fetchAdvert(slug)),
+        fetchAdvert: (productId) => dispatch(AdvertsActions.fetchAdvert(productId)),
         editAdvert: (advert) => dispatch(AdvertsActions.editAdvert(advert)),
         createAdvert: (advert) => dispatch(AdvertsActions.createAdvert(advert))
     }

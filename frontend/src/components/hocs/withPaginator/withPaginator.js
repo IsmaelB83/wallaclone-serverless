@@ -8,6 +8,8 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 // Css
 import './styles.css';
 
+const MAX_ADVERTS = process.env.REACT_APP_MAX_ADVERTS_UI || 10;
+
 // Proporciona funcionalidad de paginado a cualquier lista de objetos
 const withPaginator = (WrappedComponent) => {
 
@@ -18,7 +20,7 @@ const withPaginator = (WrappedComponent) => {
         let { currentPage, isLoading } = props;
 
         // Local variables
-        const itemsPerPage=parseInt(process.env.REACT_APP_MAX_ADVERTS_UI);
+        const itemsPerPage=parseInt(MAX_ADVERTS);
         const numPages = Math.ceil(adverts.length/itemsPerPage);
         const minAdvert = currentPage * itemsPerPage;
         const maxAdvert = currentPage * itemsPerPage + itemsPerPage;
@@ -27,7 +29,7 @@ const withPaginator = (WrappedComponent) => {
         const handleMovePaginator = increment => {
             currentPage += increment;
             if (currentPage > -1 && currentPage < numPages) {
-                props.onSetCurrentPage(currentPage);
+                //props.onSetCurrentPage(currentPage);
             }
         }
 

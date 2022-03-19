@@ -6,7 +6,6 @@ import * as middy from 'middy'
 // Own modules
 import { getProduct } from '../../../businessLogic/products'
 import { createLogger } from '../../../utils/logger'
-import { getUserId } from '../../utils'
 
 // Constants
 const LOGGER = createLogger('Products')
@@ -17,8 +16,9 @@ export const handler = middy(
     try {
       // Constants
       const productId = event.pathParameters.productId
+      const userId = event.queryStringParameters.userId
       // Get product
-      const product = await getProduct(productId, getUserId(event))
+      const product = await getProduct(productId, userId)
       if (product) {
          // Return OK
         return {

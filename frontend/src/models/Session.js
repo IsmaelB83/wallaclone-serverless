@@ -14,7 +14,7 @@ export default class Session {
     constructor(expiresIn, jwt, id) {
         this.expiresAt = (expiresIn * 1000) + new Date().getTime();;
         this.jwt = jwt;
-        this.user = id;
+        this.userId = id;
     }
 
     isAuthenticated() {

@@ -5,5 +5,4 @@ export interface CreateProductRequest {
   price: number
   type: string
   photoUrl: string
-  tag: string
 }

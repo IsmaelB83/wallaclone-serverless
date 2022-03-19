@@ -43,7 +43,6 @@ function Home(props) {
                             adverts={adverts}
                             session={session}
                             isLoading={isFetching}
-                            onSetCurrentPage={setCurrentPage}
                         />
                     </div>
                 </main>

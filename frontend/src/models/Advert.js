@@ -15,16 +15,16 @@ export const ADVERT_CONSTANTS = {
 
 // Empty advert aux
 export const EMPTY_ADVERT = {
-    _id: '',
-    slug: '',
+    userId: '',
+    createdAt: undefined,
+    productId: '',
     name: '',
     description: '',
     price: 0,
     type: ADVERT_CONSTANTS.TYPE.BUY,
-    photo: '',
+    photoUrl: '',
     booked: false,
     sold: false,
-    createdAt: undefined,
     user: ''
 }
 
@@ -38,17 +38,21 @@ export default class Advert {
      * @param {Object} Advert 
      */    
     constructor(ad) {
-        this._id = ad._id;
-        this.slug = ad.slug;
+        this.userId = ad.userId;
         this.createdAt = ad.createdAt;
-        this.name = ad.name;
-        this.description = ad.description;
-        this.price = ad.price;
-        this.type = ad.type;
-        this.photo = ad.photo;
+        this.productId = ad.productId;
         this.booked = ad.booked;
         this.sold = ad.sold;
-        this.user = ad.user;  
+        this.price = ad.price;
+        this.description = ad.description;
+        this.name = ad.name;
+        this.photoUrl = ad.photoUrl;
+        this.type = ad.type;
+        this.user = {
+            login: 'Ismael',
+            avatar: 'https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png',
+            name: 'Ismael Bernal'
+        };  
     }
 
     /**

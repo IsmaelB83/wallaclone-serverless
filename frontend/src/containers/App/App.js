@@ -50,9 +50,9 @@ export default function App(props) {
                     <PrivateRoute path='/published' exact render={(props) => <SectionList {...props} listType='published'/>}/>
                     <PrivateRoute path='/history' exact render={(props) => <SectionList {...props} listType='history'/>}/>
                     <PrivateRoute path='/advert/create' exact render={(props) => <Edit {...props} mode='create'/>}/>
-                    <PrivateRoute path='/advert/edit/:slug' exact render={(props) => <Edit {...props} mode='edit'/>}/>
+                    <PrivateRoute path='/advert/edit/:productId' exact render={(props) => <Edit {...props} mode='edit'/>}/>
                     <Route path='/callback' exact component={Callback} />
-                    <Route path='/advert/:slug' exact component={Detail} />
+                    <Route path='/advert/:productId' exact component={Detail} />
                     <Route path='/' exact component={Home} />
                     <Route component={Error404} />
                 </Switch>

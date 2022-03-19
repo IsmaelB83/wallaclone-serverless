@@ -21,21 +21,22 @@ import './styles.css';
 export default function CardTile (props) {
 
     // Props destructuring
-    const { slug, name, thumbnail, price, sold, booked, type, user, createdAt } = props.advert;
+    const { productId, name, photoUrl, price, sold, booked, type, userId, user, createdAt } = props.advert;
+    const url = `/advert/${productId}?userId=${userId}`
 
     // Render
     return(
-        <article id={`adslug_${slug}`} className='CardTile'>
+        <article id={`adslug_${productId}`} className='CardTile'>
             <header className='CardTile__Header'>
                 <p className='CardTile__Price'>{price} <span className='CardTile__Currency'>€</span></p>
-                <CardImage slug={slug} sold={sold} booked={booked} photo={thumbnail}/>
+                <CardImage url={url} sold={sold} booked={booked} photo={photoUrl}/>
             </header>
             <div className='CardTile__Content'>
                 <div className='CardTile__ContentType'>
                     <AdvertChip type='type' value={type}/>
                 </div>                
                 <div className='CardTile_ContentTitle'>
-                    <Link to={`/advert/${slug}`} className='CardTile__Title'><h2>{name}</h2></Link>
+                    <Link to={url} className='CardTile__Title'><h2>{name}</h2></Link>
                 </div>
             </div>
             <div className='CardTile__Footer'>

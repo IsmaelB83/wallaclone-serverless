@@ -35,7 +35,7 @@ export const loginRedirect = jwt => {
                 alert(`Error: ${err.error}. Check the console for further details.`);
                 return extra.history.push('/login');
             }
-            const session = new Session (authResult.expiresIn, authResult.idToken, authResult.idTokenPayload.sub);
+            const session = new Session (authResult.expiresIn, authResult.idToken, new String(authResult.idTokenPayload.sub).replace('auth0|', 'auth0-'));
             dispatch(loginRedirectAction(session));
             LocalStorage.saveLocalStorage(session);
             return extra.history.push('/');

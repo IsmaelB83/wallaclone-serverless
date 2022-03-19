@@ -14,13 +14,13 @@ import './styles.css';
 // Functional component to render an advert image with overlay transparency and status
 export default function CardImage (props) {
 
-    const { sold, booked, photo, slug, detail, t } = props;
+    const { sold, booked, photo, url, detail, t } = props;
     const status = sold?CONSTANTS.STATUS.SOLD:CONSTANTS.STATUS.BOOKED
 
     return (
         <div className='CardImage'>
             { !detail &&
-                <Link className='CardImage__Link' to={`/advert/${slug}`}>
+                <Link className='CardImage__Link' to={url}>
                     <div className={`CardImage__Overlay CardImage__Overlay--${sold||booked}`}>
                         { (sold || booked) && <span className='CardImage__Bookmark'><BookmarkBorderIcon/>{t(status)}</span> }
                     </div> 
@@ -43,7 +43,7 @@ CardImage.propTypes = {
     sold: PropTypes.bool.isRequired,
     booked: PropTypes.bool.isRequired,
     photo: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
     detail: PropTypes.bool,
     t: PropTypes.func.isRequired
 }

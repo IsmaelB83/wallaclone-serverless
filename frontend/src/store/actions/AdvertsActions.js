@@ -6,12 +6,12 @@ import { logout } from './SessionActions';
 
 /**
 * Obtener datos de un anuncio
-* @param {String} slug Slug identificativo del anuncio
+* @param {String} advertId ID of the advert
 */
-export const fetchAdvert = slug => {
+export const fetchAdvert = (advertId, userId) => {
   return async function(dispatch, getState, extra) {
     dispatch(fetchAdvertRequest());
-    return AdvertServices.getAdvert(slug)
+    return AdvertServices.getAdvert(advertId, userId)
     .then(advert => {
       dispatch(fetchAdvertSuccess(advert));
       return advert;
@@ -36,7 +36,7 @@ export const fetchAdverts = () => {
     dispatch(fetchAdvertsRequest());
     return AdvertServices.getAdverts()
     .then(response => {
-      dispatch(fetchAdvertsSuccess(response.adverts, response.totalCount, response.start, response.end));
+      dispatch(fetchAdvertsSuccess(response.adverts));
       return response;
     })
     .catch (error => {
@@ -49,7 +49,7 @@ export const fetchAdverts = () => {
 
 const fetchAdvertsRequest = () => ({ type: ACTIONS.FETCH_ADVERTS_REQUEST });
 const fetchAdvertsFailure = error => ({ type: ACTIONS.FETCH_ADVERTS_FAILURE, error });
-const fetchAdvertsSuccess = (adverts, totalCount, start, end) => ({ type: ACTIONS.FETCH_ADVERTS_SUCCESS, adverts, totalCount, start, end });
+const fetchAdvertsSuccess = adverts => ({ type: ACTIONS.FETCH_ADVERTS_SUCCESS, adverts });
 
 /**
 * Obtener anuncios de del usuario indicado
@@ -57,9 +57,9 @@ const fetchAdvertsSuccess = (adverts, totalCount, start, end) => ({ type: ACTION
 export const fetchUserAdverts = () => {   
   return async function(dispatch, getState, extra) {
     dispatch(fetchUserAdvertsRequest());
-    return AdvertServices.userProducts(getState().session.jwt)
+    return AdvertServices.userAdverts(getState().session.jwt)
     .then(response => {
-      dispatch(fetchUserAdvertsSuccess(response.adverts, response.totalCount, response.start, response.end));
+      dispatch(fetchUserAdvertsSuccess(response.adverts));
       return response;
     })
     .catch(error => {
@@ -72,7 +72,7 @@ export const fetchUserAdverts = () => {
 
 const fetchUserAdvertsRequest = () => ({ type: ACTIONS.FETCH_USER_ADVERTS_REQUEST });
 const fetchUserAdvertsFailure = error => ({ type: ACTIONS.FETCH_USER_ADVERTS_FAILURE, error });
-const fetchUserAdvertsSuccess = (adverts, totalCount, start, end) => ({ type: ACTIONS.FETCH_USER_ADVERTS_SUCCESS, adverts, totalCount, start, end });
+const fetchUserAdvertsSuccess = adverts => ({ type: ACTIONS.FETCH_USER_ADVERTS_SUCCESS, adverts });
 
 /**
 * Devuelve el historial de ventas de el usuario logueado
@@ -82,7 +82,7 @@ export const fetchSoldHistory = () => {
     dispatch(fetchSoldHistoryRequest());
     return AdvertServices.soldHistory(getState().session.jwt)
     .then(response => {
-      dispatch(fetchSoldHistorySuccess(response.adverts, response.totalCount, response.start, response.end));
+      dispatch(fetchSoldHistorySuccess(response.adverts));
       return response;
     })
     .catch(error => {
@@ -96,13 +96,13 @@ export const fetchSoldHistory = () => {
 
 const fetchSoldHistoryRequest = () => ({ type: ACTIONS.FETCH_SOLD_HISTORY_REQUEST });
 const fetchSoldHistoryFailure = error => ({ type: ACTIONS.FETCH_SOLD_HISTORY_FAILURE, error });
-const fetchSoldHistorySuccess = (adverts, totalCount, start, end) => ({ type: ACTIONS.FETCH_SOLD_HISTORY_SUCCESS, adverts, totalCount, start, end });
+const fetchSoldHistorySuccess = adverts => ({ type: ACTIONS.FETCH_SOLD_HISTORY_SUCCESS, adverts });
 
 /**
 * Editar datos de un anuncio
 * @param {Object} advert Datos actualizados del anuncio
 */
-export const editAdvert = advert => {   
+export const editAdvert = (advert) => {   
   return async function(dispatch, getState, extra) {
     dispatch(editAdvertRequest());
     return AdvertServices.editAdvert(advert, getState().session.jwt)
@@ -126,12 +126,12 @@ const editAdvertSuccess = advert => ({ type: ACTIONS.EDIT_ADVERT_SUCCESS, advert
 
 /**
 * Reservar un producto
-* @param {String} slug Slug identificativo del producto
+* @param {String} productId Product ID del producto
 */
-export const bookAdvert = (slug) => {   
+export const bookAdvert = (productId) => {   
   return async function(dispatch, getState, extra) {
     dispatch(bookAdvertRequest());
-    return AdvertServices.bookAdvert(slug, getState().session.jwt)
+    return AdvertServices.bookAdvert(productId, getState().session.jwt)
     .then(response => {
       dispatch(bookAdvertSuccess(response));
       return response;
@@ -151,12 +151,12 @@ const bookAdvertSuccess = advert => ({ type: ACTIONS.BOOK_ADVERT_SUCCESS, advert
 
 /**
 * Marcar un producto como vendido
-* @param {String} slug Slug identificativo del producto
+* @param {String} productId Product ID del producto
 */
-export const sellAdvert = (slug) => {   
+export const sellAdvert = (productId) => {   
   return async function(dispatch, getState, extra) {
     dispatch(sellAdvertRequest());
-    return AdvertServices.sellAdvert(slug, getState().session.jwt)
+    return AdvertServices.sellAdvert(productId, getState().session.jwt)
     .then(response => {
       dispatch(sellAdvertSuccess(response));
       return response;
@@ -181,7 +181,6 @@ const sellAdvertSuccess = advert => ({ type: ACTIONS.SELL_ADVERT_SUCCESS, advert
 export const createAdvert = (advert) => {   
   return async function(dispatch, getState, extra) {
     dispatch(createAdvertRequest());
-    delete advert._id;
     return AdvertServices.postAdvert(advert, getState().session.jwt)
     .then(response => {
       dispatch(createAdvertSuccess(response));
@@ -203,12 +202,12 @@ const createAdvertSuccess = advert => ({ type: ACTIONS.CREATE_ADVERT_SUCCESS, ad
 
 /**
 * Eliminar un anuncio de la base de datos
-* @param {String} slug Slug del anuncio que queremos eliminar
+* @param {String} productId Product ID del anuncio que queremos eliminar
 */
-export const deleteAdvert = (slug) => {   
+export const deleteAdvert = (productId) => {   
   return async function(dispatch, getState, extra) {
     dispatch(deleteAdvertRequest());
-    return AdvertServices.deleteAdvert(slug, getState().session.jwt)
+    return AdvertServices.deleteAdvert(productId, getState().session.jwt)
     .then(response => {
       dispatch(deleteAdvertSuccess(response));
       extra.history.push('/');

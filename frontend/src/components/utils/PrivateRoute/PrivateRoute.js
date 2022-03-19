@@ -8,6 +8,6 @@ import { Redirect, Route } from 'react-router-dom';
 
 // Main App
 const PrivateRoute = ({...props}) =>
-  props.session.user ? <Route {...props} /> : <Redirect to="/login" />;
+  props.session.userId ? <Route {...props} /> : <Redirect to="/login" />;
 
 export default PrivateRoute;

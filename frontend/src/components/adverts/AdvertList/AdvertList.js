@@ -35,8 +35,8 @@ export default function AdvertList (props) {
                 adverts.map((advert, index) => 
                     <Card   key={index}
                             advert={advert} 
-                            isLogin={session.user !== undefined}
-                            isMyAdvert={session.user === advert.user }
+                            isLogin={session.userId !== undefined}
+                            isMyAdvert={session.userId === advert.userId }
                             onBookAdvert={onBookAdvert}
                             onSellAdvert={onSellAdvert}
                             onDeleteAdvert={onDeleteAdvert}

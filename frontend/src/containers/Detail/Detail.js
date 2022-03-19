@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import queryString from 'query-string';
 // Material UI
 import Container from '@material-ui/core/Container';
 // Components
@@ -27,26 +28,27 @@ function Detail(props) {
 
     // Propiedades del index
     const { fetchAdvert, enqueueSnackbar } = props;
-    const { slug } = props.match.params;
+    const { productId } = props.match.params;
+    const { userId } = queryString.parse(props.location.search);
 
     // Load advert from API
     const [advert, setAdvert] = useState();
     useEffect(() => {
-        fetchAdvert(slug)
+        fetchAdvert(productId, userId)
         .then (advert => setAdvert(advert))
         .catch(error => enqueueSnackbar(t('Error loading advert ERROR', {error}), { variant: 'error' }));
-    }, [slug, enqueueSnackbar, fetchAdvert, t]);
+    }, [productId, userId, enqueueSnackbar, fetchAdvert, t]);
 
     // Marcar como vendido un anuncio
     const setSellAdvert = () => {
-        props.sellAdvert(advert.slug)
+        props.sellAdvert(advert.productId)
         .then (ad => setAdvert({...advert, sold: ad.sold, booked: ad.booked,}))
         .catch(error => enqueueSnackbar(t('Error setting advert as sold ERROR', {error}), { variant: 'error' }));
     }
 
     // Marcar como reservado un anuncio
     const setBookAdvert = () => {
-        props.bookAdvert(advert.slug)
+        props.bookAdvert(advert.productId)
         .then (ad => setAdvert({...advert, booked: ad.booked, sold: ad.sold}))
         .catch(error => enqueueSnackbar(t('Error setting advert as booked ERROR', {error}), { variant: 'error' }));
     }
@@ -58,9 +60,9 @@ function Detail(props) {
     }
     const confirmDeleteAdvert = () => {
         setShowModalDelete(false);
-        if (slug) {
-            props.deleteAdvert(slug)
-            .then(res => enqueueSnackbar(t('Advert SLUG deleted', {slug}), { variant: 'success', }))
+        if (productId) {
+            props.deleteAdvert(productId)
+            .then(res => enqueueSnackbar(t('Advert X deleted', {id: productId}), { variant: 'success', }))
             .catch(error => enqueueSnackbar(t('Error deleting advert ERROR', {error}), { variant: 'error', }));    
         } else {
             enqueueSnackbar(t('Error identifying advert to be deleted'), { variant: 'error', });    
@@ -80,8 +82,8 @@ function Detail(props) {
                     { !props.isFetching && advert && 
                         <AdvertDetail
                             advert={advert}
-                            isLogin={session.user !== undefined}
-                            ownAdvert={advert.user === session.user}
+                            isLogin={session.userId !== undefined}
+                            ownAdvert={advert.userId === session.userId}
                             onSellAdvert={setSellAdvert}
                             onBookAdvert={setBookAdvert}
                             onDeleteAdvert={deleteAdvertRequest}

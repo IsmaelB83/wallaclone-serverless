@@ -29,9 +29,9 @@ const mapDispatchToProps = (dispatch) => {
         // Session
         logout: () => dispatch(SessionActions.logout()),
         // Adverts
-        deleteAdvert: slug => dispatch(AdvertsActions.deleteAdvert(slug)),
-        bookAdvert: slug => dispatch(AdvertsActions.bookAdvert(slug)),
-        sellAdvert: slug => dispatch(AdvertsActions.sellAdvert(slug)),
+        deleteAdvert: productId => dispatch(AdvertsActions.deleteAdvert(productId)),
+        bookAdvert: productId => dispatch(AdvertsActions.bookAdvert(productId)),
+        sellAdvert: productId => dispatch(AdvertsActions.sellAdvert(productId)),
         fetchUserAdverts: () => dispatch(AdvertsActions.fetchUserAdverts()),
         fetchSoldHistory: () => dispatch(AdvertsActions.fetchSoldHistory()),
     }

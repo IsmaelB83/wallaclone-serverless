@@ -28,10 +28,10 @@ const mapDispatchToProps = (dispatch) => {
         // Session
         logout: () => dispatch(SessionActions.logout()),
         // Adverts
-        fetchAdvert: (slug) => dispatch(AdvertsActions.fetchAdvert(slug)),
-        bookAdvert: (slug) => dispatch(AdvertsActions.bookAdvert(slug)),
-        sellAdvert: (slug) => dispatch(AdvertsActions.sellAdvert(slug)),
-        deleteAdvert: (slug) => dispatch(AdvertsActions.deleteAdvert(slug)),
+        fetchAdvert: (productId, userId) => dispatch(AdvertsActions.fetchAdvert(productId, userId)),
+        bookAdvert: (productId) => dispatch(AdvertsActions.bookAdvert(productId)),
+        sellAdvert: (productId) => dispatch(AdvertsActions.sellAdvert(productId)),
+        deleteAdvert: (productId) => dispatch(AdvertsActions.deleteAdvert(productId)),
     }
 }
 

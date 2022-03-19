@@ -11,6 +11,15 @@ import { getAttachmentUploadUrl } from '../dataLayer/AttachmentAccess'
 // Constants
 const PRODUCT_ACCESS = new ProductAccess()
 
+    /**
+    * Receives the API event and interacts with datalayer to RETRIEVES all products from user
+    * @returns List of products from user
+    */
+    export async function getProducts(): Promise<ProductItem[]> {
+    // Get products
+    return await PRODUCT_ACCESS.getProducts()
+  }
+
 /**
 * Receives new product information and interacts with datalayer to INSERT a new product in the database
 * @param product Product information received from client
@@ -22,7 +31,7 @@ export async function createProduct(product: CreateProductRequest, userId: strin
   // Create product
   return await PRODUCT_ACCESS.create({
     userId: userId,
-    slug: uuid,
+    productId: uuid,
     createdAt: new Date().toISOString(),
     booked: false,
     sold: false,
@@ -47,8 +56,7 @@ export async function updateProduct(productId: string, userId: string, updatedPr
       description: updatedProduct.description || product.description,
       price: updatedProduct.price || product.price,
       type: updatedProduct.type || product.type,
-      photoUrl: updatedProduct.photoUrl || product.photoUrl,
-      tag: updatedProduct.tag || product.tag,
+      photoUrl: updatedProduct.photoUrl || product.photoUrl
     }
     return await PRODUCT_ACCESS.update(productId, userId, product.createdAt, newProduct)
   }
@@ -112,12 +120,24 @@ export async function deleteProduct(productId: string, userId: string): Promise<
 */
 export async function getProductsForUser(userId: string): Promise<ProductItem[]> {
   // Get products
-  return await PRODUCT_ACCESS.getProducts(userId)
+  return await PRODUCT_ACCESS.getProductsUser(userId)
 }
 
 /**
-* Receives the API event and interacts with datalayer to RETRIEVES a specific product
+* Receives the API event and interacts with datalayer to RETRIEVES all history from user
 * @param userId Owner of the product
+* @returns List of products from user
+*/
+export async function getHistoryForUser(userId: string): Promise<ProductItem[]> {
+    // Get products
+    return await PRODUCT_ACCESS.getHistoryUser(userId)
+  }
+
+  
+/**
+* Receives the API event and interacts with datalayer to RETRIEVES a specific product
+* @param productId ID of the product
+* @param userId ID of the product owner
 * @returns List of products from user
 */
 export async function getProduct(productId: string, userId: string): Promise<ProductItem> {

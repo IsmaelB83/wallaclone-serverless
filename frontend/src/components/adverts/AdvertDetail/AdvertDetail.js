@@ -28,16 +28,16 @@ import './styles.css';
 export default function AdvertDetail(props) {
 
     // Props destructuring
-    const { slug, name, description, photo, price, sold, booked, type, createdAt, user } = props.advert;
+    const { productId, name, description, photoUrl, price, sold, booked, type, createdAt, user } = props.advert;
     const { onBookAdvert, onSellAdvert, onDeleteAdvert, t } = props;
     const { ownAdvert } = props;
     
     // Render
     return (
-        <article id={`adslug_${slug}`} className='AdvertDetail'>
+        <article id={`adslug_${productId}`} className='AdvertDetail'>
             <div className='AdvertDetail__Photo'>
                 <div className='AdvertDetail__PhotoWrapper'>
-                    <CardImage slug={slug} sold={sold} booked={booked} photo={photo} detail={true}/>
+                    <CardImage productId={productId} sold={sold} booked={booked} photo={photoUrl} detail={true}/>
                 </div>
                 <div className='AdvertDetail__ShareSocial'>
                     <FacebookShareButton url={window.location.href} quote={name}>
@@ -76,7 +76,7 @@ export default function AdvertDetail(props) {
                         <Button className='ButtonStandard ButtonStandard__Green Span2'
                                 startIcon={<EditIcon />} 
                                 component={Link} 
-                                to={`/advert/edit/${slug}`}
+                                to={`/advert/edit/${productId}`}
                                 disabled={booked || sold}>
                                 {t('Edit')}
                         </Button>
