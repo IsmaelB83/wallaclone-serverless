@@ -28,16 +28,18 @@ import './styles.css';
 export default function AdvertDetail(props) {
 
     // Props destructuring
-    const { productId, name, description, photoUrl, price, sold, booked, type, createdAt, user } = props.advert;
+    const { productId, name, description, photoUrl, price, sold, booked, type, createdAt, userId, user } = props.advert;
     const { onBookAdvert, onSellAdvert, onDeleteAdvert, t } = props;
     const { ownAdvert } = props;
     
+    const url = `/advert/${productId}?userId=${userId}`
+
     // Render
     return (
         <article id={`adslug_${productId}`} className='AdvertDetail'>
             <div className='AdvertDetail__Photo'>
                 <div className='AdvertDetail__PhotoWrapper'>
-                    <CardImage productId={productId} sold={sold} booked={booked} photo={photoUrl} detail={true}/>
+                    <CardImage productId={productId} sold={sold} booked={booked} photo={photoUrl} url={url} detail={true}/>
                 </div>
                 <div className='AdvertDetail__ShareSocial'>
                     <FacebookShareButton url={window.location.href} quote={name}>

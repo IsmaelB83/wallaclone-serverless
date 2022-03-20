@@ -3,8 +3,6 @@
 import { ProductItem } from '../models/ProductItem'
 import { CreateProductRequest } from '../requests/CreateProductRequest'
 import { UpdateProductRequest } from '../requests/UpdateProductRequest'
-import { BookProductRequest } from '../requests/BookProductRequest'
-import { SoldProductRequest } from '../requests/SoldProductRequest'
 import { ProductAccess } from '../dataLayer/ProductAccess'
 import { getAttachmentUploadUrl } from '../dataLayer/AttachmentAccess'
 
@@ -64,18 +62,19 @@ export async function updateProduct(productId: string, userId: string, updatedPr
 }
 
 /**
-* Receives new product information and interacts with datalayer to UPDATE an existing product in the database
+* Receives new product information and interacts with datalayer to UPDATE its booked property in database
 * @param productId ProductId to update
 * @param userId Owner of the product
-* @param bookRequest True/False wether product is mark as booked or not
-* @returns True (update correct) or False (error updating)
+* @returns Updated product
 */
-export async function bookProduct(productId: string, userId: string, bookRequest: BookProductRequest): Promise<boolean> {
+export async function bookProduct(productId: string, userId: string): Promise<ProductItem> {
   // Get old product information
   const product = await PRODUCT_ACCESS.get(productId, userId)
+  product.booked = !product.booked
   // Check user id of token is the same as user in bearer
   if (product && product.userId === userId) {
-    return await PRODUCT_ACCESS.book(productId, userId, product.createdAt, bookRequest.book)
+    await PRODUCT_ACCESS.book(productId, userId, product.createdAt, product.booked)
+    return product;
   }
   throw `User not authorized to mark as booked a product ${productId}`
 }
@@ -84,15 +83,16 @@ export async function bookProduct(productId: string, userId: string, bookRequest
 * Receives new product information and interacts with datalayer to UPDATE an existing product in the database
 * @param productId ProductId to update
 * @param userId Owner of the product
-* @param soldRquest True/False wether product is mark as sold or not
-* @returns True (update correct) or False (error updating)
+* @returns Updated product
 */
-export async function soldProduct(productId: string, userId: string, soldRquest: SoldProductRequest): Promise<boolean> {
+export async function soldProduct(productId: string, userId: string): Promise<ProductItem> {
   // Get old product information
   const product = await PRODUCT_ACCESS.get(productId, userId)
+  product.sold = !product.sold
   // Check user id of token is the same as user in bearer
   if (product && product.userId === userId) {
-    return await PRODUCT_ACCESS.sold(productId, userId, product.createdAt, soldRquest.sold) 
+    await PRODUCT_ACCESS.sold(productId, userId, product.createdAt, product.sold) 
+    return product;
   }
   throw `User not authorized to mark as sold a product ${productId}`
 }

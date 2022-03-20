@@ -17,14 +17,14 @@ export const handler = middy(
     try {
       // Constants
       const productId = event.pathParameters.productId
-      const sold = JSON.parse(event.body).sold
       // Update product
-      await soldProduct(productId, getUserId(event), sold)
+      const product = await soldProduct(productId, getUserId(event))
       return {
         statusCode: 200,
         headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           Result: 'Ok. Product UPDATE',
+          Item: product
         })
       }
     } catch (e) {

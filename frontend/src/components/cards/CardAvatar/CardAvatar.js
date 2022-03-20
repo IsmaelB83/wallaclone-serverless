@@ -1,7 +1,6 @@
 // Node
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
 // Material
 import Avatar from '@material-ui/core/Avatar';
 // Assets
@@ -11,15 +10,15 @@ import './styles.css';
 // Functional component to render an avatar
 export default function CardAvatar (props) {
 
-    const { login, avatar, name } = props;
+    const { avatar, name } = props;
 
     return (
-        <Link to={`/published/${login}`} className={`CardAvatar CardAvatar--${props.size}`}>
+        <div className={`CardAvatar CardAvatar--${props.size}`}>
             <div>
                 <Avatar className='Avatar' alt='avatar' src={avatar} />
                 <span>{name}</span>
             </div>
-        </Link>
+        </div>
     )
 }
 

@@ -23,7 +23,7 @@ export default function CardTile (props) {
     // Props destructuring
     const { productId, name, photoUrl, price, sold, booked, type, userId, user, createdAt } = props.advert;
     const url = `/advert/${productId}?userId=${userId}`
-
+    
     // Render
     return(
         <article id={`adslug_${productId}`} className='CardTile'>
@@ -40,7 +40,7 @@ export default function CardTile (props) {
                 </div>
             </div>
             <div className='CardTile__Footer'>
-                <CardAvatar login={user.login} name={user.name} avatar={user.avatar}/>
+                <CardAvatar login={user.login} name={user.login} avatar={user.avatar}/>
                 <Moment className='CardTile__Date' locale={i18n.language} fromNow>{createdAt}</Moment>
             </div>
         </article>

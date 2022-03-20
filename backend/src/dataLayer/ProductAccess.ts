@@ -49,6 +49,10 @@ export class ProductAccess {
     async getProducts (): Promise<ProductItem[]>{
         const result = await DB_CLIENT.scan({
             TableName: DB_TABLE,
+            FilterExpression: "sold = :sold",
+            ExpressionAttributeValues: {
+                ':sold': false
+            },
         }).promise()
         const items = result.Items?.map(item => (item as ProductItem))
         return items;
@@ -59,11 +63,14 @@ export class ProductAccess {
     * @param userId Product owner id
     */
     async getProductsUser (userId: string): Promise<ProductItem[]>{
+        console.log(userId)
         const result = await DB_CLIENT.query({
             TableName: DB_TABLE,
             KeyConditionExpression: 'userId = :userId',
+            FilterExpression: "sold = :sold",
             ExpressionAttributeValues: {
-                ':userId': userId
+                ':userId': userId,
+                ':sold': false
             },
             ScanIndexForward: false
         }).promise()
@@ -77,9 +84,11 @@ export class ProductAccess {
     * @param userId Product owner id
     */
     async getHistoryUser (userId: string): Promise<ProductItem[]>{
+        console.log(userId)
         const result = await DB_CLIENT.query({
             TableName: DB_TABLE,
-            KeyConditionExpression: 'userId = :userId, sold = :sold',
+            KeyConditionExpression: 'userId = :userId',
+            FilterExpression: "sold = :sold",
             ExpressionAttributeValues: {
                 ':userId': userId,
                 ':sold': true
@@ -157,9 +166,6 @@ export class ProductAccess {
             ExpressionAttributeValues:{
                 ":booked": book,
                 ":productId": productId
-            },
-            ExpressionAttributeNames: {
-                "#name": "name"
             }
         }).promise()
         return true
@@ -186,9 +192,6 @@ export class ProductAccess {
             ExpressionAttributeValues:{
                 ":sold": sold,
                 ":productId": productId
-            },
-            ExpressionAttributeNames: {
-                "#name": "name"
             }
         }).promise()
         return true

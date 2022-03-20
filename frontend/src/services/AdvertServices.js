@@ -13,7 +13,17 @@ const API_URL = `${process.env.REACT_APP_API_URL}/products`;
 * Objeto API
 */
 export default {
-      
+    
+    /**
+    * Obtener un anuncio por su productId
+    */
+    getAdvert: (productId, userId) => {
+        // Call endpoint and return
+        const aux = String(userId).replace('|','%7C')
+        return Axios.get(`${API_URL}/${productId}?userId=${aux}`)
+        .then(res => new Advert(res.data.Item));
+    },
+    
     /**
     * Obtener todos los anuncios
     */
@@ -28,15 +38,6 @@ export default {
     },
     
     /**
-    * Obtener un anuncio por su productId
-    */
-    getAdvert: (productId, userId) => {
-        // Call endpoint and return
-        return Axios.get(`${API_URL}/${productId}?userId=${userId}`)
-        .then(res => new Advert(res.data.Item));
-    },
-    
-    /**
     * Returns all adverts for a specific user
     */
     userAdverts: jwt => {
@@ -48,10 +49,14 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.get(`${API_URL}/sold`, config)
-        .then(res => res.data.Items.map(advert => new Advert(advert)));
+        return Axios.get(`${API_URL}/active`, config)
+        .then(res => {
+            return {
+                adverts: res.data.Items.map(advert => new Advert(advert))
+            }
+        });
     },
-
+    
     /**
     * Returns all sales adverts for a specific user
     */
@@ -65,9 +70,13 @@ export default {
         }
         // Call endpoint and return
         return Axios.get(`${API_URL}/sold`, config)
-        .then(res => res.data.Items.map(advert => new Advert(advert)));
+        .then(res => {
+            return {
+                adverts: res.data.Items.map(advert => new Advert(advert))
+            }
+        });
     },
-
+    
     /**
     * Llama a la API para crear un nuevo anuncio
     * @param {Advert} advert 
@@ -131,7 +140,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.put(`${API_URL}/${productId}/book`, config)
+        return Axios.patch(`${API_URL}/${productId}/book`, null, config)
         .then(res => new Advert(res.data.Item));
     },
     
@@ -148,7 +157,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.put(`${API_URL}/${productId}/sell`, config)
+        return Axios.patch(`${API_URL}/${productId}/sold`, null, config)
         .then(res => new Advert(res.data.Item));
     },
     

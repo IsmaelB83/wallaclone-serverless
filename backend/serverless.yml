@@ -54,17 +54,26 @@
         - name: UpdateProductRequest
           contentType: application/json
           schema: ${file(models/update-product-model.json)}
-        - name: BookProductRequest
-          contentType: application/json
-          schema: ${file(models/book-product-model.json)}
-        - name: SoldProductRequest
-          contentType: application/json
-          schema: ${file(models/sold-product-model.json)}
 
   functions:
 
     Auth:
       handler: src/lambda/auth/auth0Authorizer.handler
+
+    GetProduct:
+      handler: src/lambda/http/products/getProduct.handler
+      events:
+        - http:
+            method: get
+            path: products/{productId}
+            cors: true
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GetProduct-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
 
     GetProducts:
       handler: src/lambda/http/products/getProducts.handler
@@ -86,16 +95,15 @@
       events:
         - http:
             method: get
-            path: products/user
+            path: products/active
             cors: true
             authorizer: Auth
       iamRoleStatementsInherit: true
-      iamRoleStatementsName: GetProducts-Lambda-role
+      iamRoleStatementsName: GetUserProducts-Lambda-role
       iamRoleStatements:
         - Effect: Allow
           Action: 
             - dynamodb:Query
-            - dynamodb:Scan
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
 
     GetHistoryUser:
@@ -103,32 +111,16 @@
       events:
         - http:
             method: get
-            path: products/history
+            path: products/sold
             cors: true
             authorizer: Auth
       iamRoleStatementsInherit: true
-      iamRoleStatementsName: GetProducts-Lambda-role
+      iamRoleStatementsName: GetHistoryUser-Lambda-role
       iamRoleStatements:
         - Effect: Allow
           Action: 
             - dynamodb:Query
-            - dynamodb:Scan
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
-
-    GetProduct:
-      handler: src/lambda/http/products/getProduct.handler
-      events:
-        - http:
-            method: get
-            path: products/{productId}
-            cors: true
-      iamRoleStatementsInherit: true
-      iamRoleStatementsName: GetProduct-Lambda-role
-      iamRoleStatements:
-        - Effect: Allow
-          Action: 
-            - dynamodb:Query
-          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
 
     CreateProduct:
       handler: src/lambda/http/products/createProduct.handler
@@ -186,12 +178,6 @@
             path: products/{productId}/book
             cors: true
             authorizer: Auth
-            reqValidatorName: RequestBodyValidator
-            documentation:
-              summary: Mark as booked an existing Product
-              description: Mark as booked an existing Product
-              requestModels:
-                'application/json': BookProductRequest
       iamRoleStatementsInherit: true
       iamRoleStatementsName: BookProduct-Lambda-role
       iamRoleStatements:
@@ -212,12 +198,6 @@
             path: products/{productId}/sold
             cors: true
             authorizer: Auth
-            reqValidatorName: RequestBodyValidator
-            documentation:
-              summary: Mark as sold an existing Product
-              description: Mark as sold an existing Product
-              requestModels:
-                'application/json': SoldProductRequest
       iamRoleStatementsInherit: true
       iamRoleStatementsName: SoldProduct-Lambda-role
       iamRoleStatements:

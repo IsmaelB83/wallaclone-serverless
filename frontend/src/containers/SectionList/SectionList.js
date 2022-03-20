@@ -37,8 +37,11 @@ export default function SectionList (props) {
                 .catch(error => enqueueSnackbar(t('Error loading USER sold history ERROR', {user: sessionLogin, error}), { variant: 'error' }));
                 break;
             case 'published':
-                fetchUserAdverts(login)
-                .catch(error => enqueueSnackbar(t('Error loading USER adverts ERROR', {user: login, error}), { variant: 'error' }));
+                fetchUserAdverts()
+                .catch(error => {
+                    console.log(error)
+                    enqueueSnackbar(t('Error loading USER adverts ERROR', {user: login, error}), { variant: 'error' })
+                });
                 break;
             default:
                 break;
