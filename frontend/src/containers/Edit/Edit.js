@@ -44,7 +44,7 @@ function Edit(props) {
     const submitAdvert = (inputs) => {
         // Creo un anuncio con los datos del estado y lo valido
         const newAdvert = new Advert(inputs);
-        if (!newAdvert.isValid() || ( !inputs.file && !inputs.photo )) {
+        if (!newAdvert.isValid() || ( !inputs.file && !inputs.photoUrl )) {
             enqueueSnackbar(t('Advert data is incomplete'), { variant: 'error' });
         } else {
             // Lanzando operacion al backend

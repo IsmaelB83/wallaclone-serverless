@@ -19,12 +19,13 @@ export const handler = middy(
       const productId = event.pathParameters.productId
       const updatedProduct = JSON.parse(event.body)
       // Update product
-      await updateProduct(productId, getUserId(event), updatedProduct)
+      const product = await updateProduct(productId, getUserId(event), updatedProduct)
       return {
         statusCode: 200,
         headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           Result: 'Ok. Product updated',
+          Item: product
         })
       }
     } catch (e) {

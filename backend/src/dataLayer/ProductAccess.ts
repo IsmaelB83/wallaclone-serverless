@@ -130,7 +130,7 @@ export class ProductAccess {
                 createdAt: createdAt
             },
             ConditionExpression: "productId = :productId",
-            UpdateExpression: "set #name=:name, price=:price, type=:type, description=:description",
+            UpdateExpression: "set #name = :name, price=:price, #type=:type, description=:description",
             ExpressionAttributeValues:{
                 ":name": product.name,
                 ":price": product.price,
@@ -139,7 +139,8 @@ export class ProductAccess {
                 ":productId": productId
             },
             ExpressionAttributeNames: {
-                "#name": "name"
+                "#name": "name",
+                "#type": "type"
             }
         }).promise()
         return true

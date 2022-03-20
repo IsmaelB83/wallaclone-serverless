@@ -82,13 +82,14 @@ export default {
     * @param {Advert} advert 
     */
     postAdvert: (advert, jwt) => {
-        // Form Data
-        const formData = new FormData();
-        formData.append('name', advert.name);
-        formData.append('description', advert.description);
-        formData.append('price', advert.price);
-        formData.append('type', advert.type);
-        formData.append('photoFile', advert.file);
+        // Advert data
+        const data = {
+            name: advert.name,
+            description: advert.description,
+            price: advert.price,
+            type: advert.type,
+            //photoUrl: photoUrl
+        }
         // Headers for authenticated endpoint
         const config  = {
             headers: {
@@ -97,7 +98,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.post(`${API_URL}`, formData, config)
+        return Axios.post(`${API_URL}`, data, config)
         .then(res => new Advert(res.data.Item));
     },
     
@@ -107,14 +108,13 @@ export default {
     */
     editAdvert: (advert, jwt) => {
         // Form Data
-        const formData = new FormData();
-        formData.append('name', advert.name);
-        formData.append('description', advert.description);
-        formData.append('price', advert.price);
-        formData.append('type', advert.type);
-        formData.append('booked', advert.booked);
-        formData.append('sold', advert.sold);
-        formData.append('photoFile', advert.file);
+        const data = {
+            name: advert.name,
+            description: advert.description,
+            price: advert.price,
+            type: advert.type,
+            //photoUrl: photoUrl
+        }
         // Headers for authenticated endpoint
         const config  = {
             headers: {
@@ -123,7 +123,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.put(`${API_URL}/${advert.productId}`, formData, config)
+        return Axios.patch(`${API_URL}/${advert.productId}`, data, config)
         .then(res => new Advert(res.data.Item));
     },
     
@@ -175,6 +175,6 @@ export default {
         }
         // Call endpoint and return
         return Axios.delete(`${API_URL}/${productId}`, config)
-        .then(res => res.data.Item);
+        .then(res => res.data);
     }
 }

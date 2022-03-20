@@ -42,21 +42,20 @@ export async function createProduct(product: CreateProductRequest, userId: strin
 * @param productId ProductId to update
 * @param userId Owner of the product
 * @param updatedProduct New Product information
-* @returns True (update correct) or False (error updating)
+* @returns Updated product item
 */
-export async function updateProduct(productId: string, userId: string, updatedProduct: UpdateProductRequest): Promise<boolean> {
+export async function updateProduct(productId: string, userId: string, updatedProduct: UpdateProductRequest): Promise<ProductItem> {
   // Get old product information
   const product = await PRODUCT_ACCESS.get(productId, userId)
   // Check user id of token is the same as user in bearer
   if (product && product.userId === userId) {
-    const newProduct = {
-      name: updatedProduct.name || product.name,
-      description: updatedProduct.description || product.description,
-      price: updatedProduct.price || product.price,
-      type: updatedProduct.type || product.type,
-      photoUrl: updatedProduct.photoUrl || product.photoUrl
-    }
-    return await PRODUCT_ACCESS.update(productId, userId, product.createdAt, newProduct)
+      product.name = updatedProduct.name || product.name,
+      product.description = updatedProduct.description || product.description,
+      product.price = updatedProduct.price || product.price,
+      product.type = updatedProduct.type || product.type,
+      product.photoUrl = updatedProduct.photoUrl || product.photoUrl
+    await PRODUCT_ACCESS.update(productId, userId, product.createdAt, product)
+    return product
   }
   throw `User not authorized to update product ${productId}`
 }
