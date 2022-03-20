@@ -37,7 +37,7 @@ export default function AdvertForm(props) {
     // Handle close modal
     const refInputFile = useRef(undefined);
     const [fileTemp, setFileTemp] = useState();
-    const [photoTemp, setPhotoTemp] = useState(props.advert.photo);
+    const [photoTemp, setPhotoTemp] = useState(props.advert.photoUrl);
     const changeInputFile = (ev) => {
         ev.stopPropagation();
         ev.preventDefault();

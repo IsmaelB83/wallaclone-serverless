@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import queryString from 'query-string';
 // Material UI
 import Container from '@material-ui/core/Container';
 // Components
@@ -25,18 +26,19 @@ function Edit(props) {
     const { enqueueSnackbar, fetchAdvert, mode, session, t} = props;
     const { productId } = props.match.params;
     const { isFetching, isUpdating, isCreating, error } = props.ui;
+    const { userId } = queryString.parse(props.location.search);
 
     // Load inicial
     const [ advert, setAdvert ] = useState();
     useEffect(() => {
         if (mode === 'edit') {
-            fetchAdvert(productId)
+            fetchAdvert(productId, userId)
             .then (advert => setAdvert(advert))
             .catch(error  => enqueueSnackbar(t('Error fetching advert ERROR', {error}), { variant: 'error' }));
         } else {
             setAdvert(new Advert(EMPTY_ADVERT))
         }
-    }, [fetchAdvert, productId, mode, enqueueSnackbar, t])
+    }, [fetchAdvert, productId, userId, mode, enqueueSnackbar, t])
 
     // Manejador del submit del formulario
     const submitAdvert = (inputs) => {
@@ -65,6 +67,7 @@ function Edit(props) {
             <Container className='Container'>
                 <main className='Section__Wrapper Edit'>
                     <HeaderAdvertEdit mode={mode}/>
+                    { ( isUpdating || isCreating ) && <Loading text={mode === 'edit' ? t('Trying to edit advert...') : t('Trying to create advert...') }/> }
                     { advert &&
                         <AdvertForm noValidate 
                                     autoComplete='off' 
@@ -74,7 +77,6 @@ function Edit(props) {
                         />
                     }
                     { isFetching && <Loading text={'fetching advert'}/> }
-                    { ( isUpdating || isCreating ) && <Loading text={mode === 'edit' ? t('Trying to edit advert...') : t('Trying to create advert...') }/> }
                     { error && <Error error={error}/> }
                 </main>
             </Container>

@@ -34,10 +34,16 @@ export function ui(state = initialState.ui, action) {
             return { ...state, error: null, isAuthenticating: false }
         // Edit related
         case ADVERTS.EDIT_ADVERT_REQUEST:
+        case ADVERTS.BOOK_ADVERT_REQUEST:
+        case ADVERTS.SELL_ADVERT_REQUEST:
             return { ...state, error: null, isUpdating: true }
         case ADVERTS.EDIT_ADVERT_FAILURE:
+        case ADVERTS.BOOK_ADVERT_FAILURE:
+        case ADVERTS.SELL_ADVERT_FAILURE:
             return { ...state, error: action.error, isUpdating: false }
         case ADVERTS.EDIT_ADVERT_SUCCESS:
+        case ADVERTS.BOOK_ADVERT_SUCCESS:
+        case ADVERTS.SELL_ADVERT_SUCCESS:
             return { ...state, error: null, isUpdating: false }
         // Creation related
         case ADVERTS.CREATE_ADVERT_REQUEST:

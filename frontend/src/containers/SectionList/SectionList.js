@@ -9,6 +9,7 @@ import HeaderPublished from '../../components/headers/HeaderPublished';
 import HeaderHistory from '../../components/headers/HeaderHistory';
 import Footer from '../../components/layout/Footer';
 import NavBar from '../../components/layout/NavBar';
+import Loading from '../../components/utils/Loading';
 // Own modules
 // Models
 // Assets
@@ -24,17 +25,16 @@ export default function SectionList (props) {
     const { enqueueSnackbar, 
             fetchSoldHistory, fetchUserAdverts, setCurrentPage, 
             bookAdvert, sellAdvert, deleteAdvert, logout } = props;
-    const { currentPage, isFetching } = props.ui;
+    const { currentPage, isFetching, isUpdating } = props.ui;
     const { adverts, session, history, listType } = props;
     const { login } = props.match.params;
-    const sessionLogin = props.session.login;
 
     // Cargo anuncios del usuario solicitado
     useEffect(() => {
         switch (listType) {
             case 'history':
                 fetchSoldHistory()
-                .catch(error => enqueueSnackbar(t('Error loading USER sold history ERROR', {user: sessionLogin, error}), { variant: 'error' }));
+                .catch(error => enqueueSnackbar(t('Error loading USER sold history ERROR', {user: session.userId, error}), { variant: 'error' }));
                 break;
             case 'published':
                 fetchUserAdverts()
@@ -46,7 +46,7 @@ export default function SectionList (props) {
             default:
                 break;
         }
-    }, [listType, fetchSoldHistory, fetchUserAdverts, enqueueSnackbar, login, sessionLogin, t]);
+    }, [listType, fetchSoldHistory, fetchUserAdverts, enqueueSnackbar, login, session, t]);
 
     // Reservado
     const bookAdvertHandler = productId => {
@@ -59,7 +59,7 @@ export default function SectionList (props) {
     };
 
     // Edit Advert
-    const editAdvertHandler = productId => history.push(`/advert/edit/${productId}`);
+    const editAdvertHandler = productId => history.push(`/advert/edit/${productId}?userId=${session.userId}`);
 
     // Borrar anuncio
     const [showModalDelete, setShowModalDelete] = useState(false);
@@ -90,6 +90,7 @@ export default function SectionList (props) {
             <Container className='Container'>
                 <main className='Section__Wrapper'>
                     {HeaderSection(listType, adverts.length, login, session)}
+                    { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
                     <AdvertList 
                         type='list' 
                         currentPage={currentPage}

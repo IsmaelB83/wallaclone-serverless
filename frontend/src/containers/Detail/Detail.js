@@ -27,9 +27,10 @@ function Detail(props) {
     const { t, session } = props;
 
     // Propiedades del index
-    const { fetchAdvert, enqueueSnackbar } = props;
-    const { productId } = props.match.params;
-    const { userId } = queryString.parse(props.location.search);
+    const { fetchAdvert, sellAdvert, bookAdvert, deleteAdvert, logout, enqueueSnackbar } = props;
+    const { error, isFetching, isUpdating, location, match } = props;
+    const { productId } = match.params;
+    const { userId } = queryString.parse(location.search);
 
     // Load advert from API
     const [advert, setAdvert] = useState();
@@ -41,14 +42,14 @@ function Detail(props) {
 
     // Marcar como vendido un anuncio
     const setSellAdvert = () => {
-        props.sellAdvert(advert.productId)
+        sellAdvert(advert.productId)
         .then (ad => setAdvert({...advert, sold: ad.sold, booked: ad.booked,}))
         .catch(error => enqueueSnackbar(t('Error setting advert as sold ERROR', {error}), { variant: 'error' }));
     }
 
     // Marcar como reservado un anuncio
     const setBookAdvert = () => {
-        props.bookAdvert(advert.productId)
+        bookAdvert(advert.productId)
         .then (ad => setAdvert({...advert, booked: ad.booked, sold: ad.sold}))
         .catch(error => enqueueSnackbar(t('Error setting advert as booked ERROR', {error}), { variant: 'error' }));
     }
@@ -61,7 +62,7 @@ function Detail(props) {
     const confirmDeleteAdvert = () => {
         setShowModalDelete(false);
         if (productId) {
-            props.deleteAdvert(productId)
+            deleteAdvert(productId)
             .then(res => enqueueSnackbar(t('Advert X deleted', {id: productId}), { variant: 'success', }))
             .catch(error => enqueueSnackbar(t('Error deleting advert ERROR', {error}), { variant: 'error', }));    
         } else {
@@ -75,11 +76,12 @@ function Detail(props) {
     // Render
     return (
         <React.Fragment>
-            <NavBar session={session} onLogout={props.logout}/>
+            <NavBar session={session} onLogout={logout}/>
             <Container className='Container'>
                 <main className='Section__Wrapper Detail'>
                     <HeaderAdvertDetail/>
-                    { !props.isFetching && advert && 
+                    { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
+                    { !isFetching && advert && 
                         <AdvertDetail
                             advert={advert}
                             isLogin={session.userId !== undefined}
@@ -89,8 +91,8 @@ function Detail(props) {
                             onDeleteAdvert={deleteAdvertRequest}
                         />
                     }
-                { props.error && <Error error={props.error}/>}
-                { props.isFetching && <Loading text={t('Loading advert')}/> }
+                { error && <Error error={error}/>}
+                { isFetching && <Loading text={t('Loading advert')}/> }
                 </main>
                 {   showModalDelete && 
                     <ModalConfirm   onConfirm={confirmDeleteAdvert} 
@@ -100,14 +102,9 @@ function Detail(props) {
                     /> 
                 }
             </Container>
-            <Footer session={session} onLogout={props.logout}/>
+            <Footer session={session} onLogout={logout}/>
         </React.Fragment>
     );
-}
-
-AdvertDetail.propTypes = {
-    isUpdating: PropTypes.bool,
-    error: PropTypes.string,
 }
 
 export default withNamespaces()(Detail);

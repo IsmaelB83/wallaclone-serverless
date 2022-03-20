@@ -31,9 +31,8 @@ export default function AdvertDetail(props) {
     const { productId, name, description, photoUrl, price, sold, booked, type, createdAt, userId, user } = props.advert;
     const { onBookAdvert, onSellAdvert, onDeleteAdvert, t } = props;
     const { ownAdvert } = props;
+    const url = `/advert/edit/${productId}?userId=${userId}`
     
-    const url = `/advert/${productId}?userId=${userId}`
-
     // Render
     return (
         <article id={`adslug_${productId}`} className='AdvertDetail'>
@@ -78,7 +77,7 @@ export default function AdvertDetail(props) {
                         <Button className='ButtonStandard ButtonStandard__Green Span2'
                                 startIcon={<EditIcon />} 
                                 component={Link} 
-                                to={`/advert/edit/${productId}`}
+                                to={url}
                                 disabled={booked || sold}>
                                 {t('Edit')}
                         </Button>
