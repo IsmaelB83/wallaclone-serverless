@@ -11,6 +11,7 @@ import { getUserId } from '../../utils'
 
 // Constants
 const LOGGER = createLogger('Products')
+const NO_PHOTO = process.env.NO_PHOTO;
 
 // Handler function to create a product
 export const handler = middy(
@@ -18,6 +19,7 @@ export const handler = middy(
     try {
       // Product object
       const newProduct: CreateProductRequest = JSON.parse(event.body)
+      if (!newProduct.photoUrl) newProduct.photoUrl = NO_PHOTO
       // Create product
       const product = await createProduct(newProduct, getUserId(event), context.awsRequestId);
       // Return OK
@@ -25,7 +27,7 @@ export const handler = middy(
         statusCode: 200,
         headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
-          item: product
+          Item: product
         })
       } 
     } catch (e) {

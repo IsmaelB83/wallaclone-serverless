@@ -69,6 +69,7 @@
     "Advert X updated": "Anuncio {{id}} actualizado",
     "Name": "Nombre",
     "Enter an advert description": "Introduce la descripción del anuncio",
+    "Trying to delete advert...": "Intentando eliminar anuncio...",
     "Trying to edit advert...": "Intentando editar el anuncio...",
     "Trying to create advert...": "Intentando crear el anuncio...",
     "Advert data is incomplete": "Los datos del anuncio son incompletos",

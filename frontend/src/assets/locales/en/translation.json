@@ -69,6 +69,7 @@
     "Advert X updated": "Advert {{id}} updated",
     "Name": "Name",
     "Enter an advert description": "Enter an advert description",
+    "Trying to delete advert...": "Trying to delete advert...",
     "Trying to edit advert...": "Trying to edit advert...",
     "Trying to create advert...": "Trying to create advert...",
     "Advert data is incomplete": "Advert data is incomplete",

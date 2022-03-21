@@ -25,8 +25,8 @@ function Edit(props) {
     // Props destructuring
     const { enqueueSnackbar, fetchAdvert, mode, session, t} = props;
     const { productId } = props.match.params;
-    const { isFetching, isUpdating, isCreating, error } = props.ui;
-    const { userId } = queryString.parse(props.location.search);
+    const { isFetching, isUpdating, isCreating, isDeleting, error } = props.ui;
+    const { userId } = queryString.parse(props.location.search);  
 
     // Load inicial
     const [ advert, setAdvert ] = useState();
@@ -67,7 +67,8 @@ function Edit(props) {
             <Container className='Container'>
                 <main className='Section__Wrapper Edit'>
                     <HeaderAdvertEdit mode={mode}/>
-                    { ( isUpdating || isCreating ) && <Loading text={mode === 'edit' ? t('Trying to edit advert...') : t('Trying to create advert...') }/> }
+                    { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
+                    { isCreating && <Loading text={t('Trying to create advert...')}/> }
                     { advert &&
                         <AdvertForm noValidate 
                                     autoComplete='off' 

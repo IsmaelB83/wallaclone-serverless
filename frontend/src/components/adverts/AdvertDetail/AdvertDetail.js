@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
-import { FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
+import { TwitterShareButton, WhatsappShareButton } from "react-share";
+import { TwitterIcon, WhatsappIcon } from "react-share";
 // Material UI
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -41,9 +41,6 @@ export default function AdvertDetail(props) {
                     <CardImage productId={productId} sold={sold} booked={booked} photo={photoUrl} url={url} detail={true}/>
                 </div>
                 <div className='AdvertDetail__ShareSocial'>
-                    <FacebookShareButton url={window.location.href} quote={name}>
-                        <FacebookIcon size={32} round={true} />
-                    </FacebookShareButton>
                     <TwitterShareButton url={window.location.href} title={name}>
                         <TwitterIcon size={32} round={true} />
                     </TwitterShareButton>

@@ -28,7 +28,7 @@ function Detail(props) {
 
     // Propiedades del index
     const { fetchAdvert, sellAdvert, bookAdvert, deleteAdvert, logout, enqueueSnackbar } = props;
-    const { error, isFetching, isUpdating, location, match } = props;
+    const { error, isFetching, isUpdating, isDeleting, location, match } = props;
     const { productId } = match.params;
     const { userId } = queryString.parse(location.search);
 
@@ -81,6 +81,7 @@ function Detail(props) {
                 <main className='Section__Wrapper Detail'>
                     <HeaderAdvertDetail/>
                     { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
+                    { isDeleting && <Loading text={t('Trying to delete advert...')}/> }
                     { !isFetching && advert && 
                         <AdvertDetail
                             advert={advert}

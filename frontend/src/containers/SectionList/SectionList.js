@@ -25,7 +25,7 @@ export default function SectionList (props) {
     const { enqueueSnackbar, 
             fetchSoldHistory, fetchUserAdverts, setCurrentPage, 
             bookAdvert, sellAdvert, deleteAdvert, logout } = props;
-    const { currentPage, isFetching, isUpdating } = props.ui;
+    const { currentPage, isFetching, isUpdating, isDeleting } = props.ui;
     const { adverts, session, history, listType } = props;
     const { login } = props.match.params;
 
@@ -91,6 +91,7 @@ export default function SectionList (props) {
                 <main className='Section__Wrapper'>
                     {HeaderSection(listType, adverts.length, login, session)}
                     { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
+                    { isDeleting && <Loading text={t('Trying to delete advert...')}/> }
                     <AdvertList 
                         type='list' 
                         currentPage={currentPage}

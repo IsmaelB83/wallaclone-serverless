@@ -25,6 +25,7 @@
       PRODUCTS_TABLE_INDEX: products-index-${self:provider.stage}
       ATTACHMENT_S3_BUCKET: products-ibernal-${self:provider.stage}
       ATTACHMENT_S3_URL: https://products-ibernal-${self:provider.stage}.s3.amazonaws.com/
+      NO_PHOTO: https://products-ibernal-${self:provider.stage}.s3.amazonaws.com/nophoto.jpg
       SIGNED_URL_EXPIRATION: 300
       JWKSURL: https://dev-wbbbogs3.us.auth0.com/.well-known/jwks.json
 

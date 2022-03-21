@@ -3,3 +3,7 @@
     justify-content: center;
     align-items: center !important;
 }
+
+.Edit .AdvertEditForm {
+    margin-top: 1rem;
+}
