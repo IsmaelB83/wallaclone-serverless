@@ -87,8 +87,7 @@ export default {
             name: advert.name,
             description: advert.description,
             price: advert.price,
-            type: advert.type,
-            //photoUrl: photoUrl
+            type: advert.type
         }
         // Headers for authenticated endpoint
         const config  = {
@@ -100,6 +99,23 @@ export default {
         // Call endpoint and return
         return Axios.post(`${API_URL}`, data, config)
         .then(res => new Advert(res.data.Item));
+    },
+    
+    /**
+    * Llama a la API para obtener un pre-signed url del bucket
+    * @param {Advert} advert 
+    */
+    getPresignedUrl: (id, jwt) => {
+        // Headers for authenticated endpoint
+        const config  = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            }
+        }
+        // Call endpoint and return
+        return Axios.post(`${API_URL}/${id}/attachment`, {}, config)
+        .then(res => res.data.uploadUrl);
     },
     
     /**
@@ -131,7 +147,7 @@ export default {
     * Llama a la API para marcar un anuncio como reservado
     * @param {Advert} advert 
     */
-    bookAdvert: (productId, jwt) => {
+    bookAdvert: (id, jwt) => {
         // Headers for authenticated endpoint
         const config  = {
             headers: {
@@ -140,7 +156,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.patch(`${API_URL}/${productId}/book`, null, config)
+        return Axios.patch(`${API_URL}/${id}/book`, null, config)
         .then(res => new Advert(res.data.Item));
     },
     
@@ -148,7 +164,7 @@ export default {
     * Llama a la API para marcar un anuncio como reservado
     * @param {Advert} advert 
     */
-    sellAdvert: (productId, jwt) => {
+    sellAdvert: (id, jwt) => {
         // Headers for authenticated endpoint
         const config  = {
             headers: {
@@ -157,7 +173,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.patch(`${API_URL}/${productId}/sold`, null, config)
+        return Axios.patch(`${API_URL}/${id}/sold`, null, config)
         .then(res => new Advert(res.data.Item));
     },
     
@@ -165,7 +181,7 @@ export default {
     * Llama a la API para editar un anuncio
     * @param {Advert} advert 
     */
-    deleteAdvert: (productId, jwt) => {
+    deleteAdvert: (id, jwt) => {
         // Headers for authenticated endpoint
         const config  = {
             headers: {
@@ -174,7 +190,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.delete(`${API_URL}/${productId}`, config)
+        return Axios.delete(`${API_URL}/${id}`, config)
         .then(res => res.data);
     }
 }

@@ -95,7 +95,7 @@ export default function SectionList (props) {
                     <AdvertList 
                         type='list' 
                         currentPage={currentPage}
-                        adverts={adverts}
+                        onSetCurrentPage={setCurrentPage}                        adverts={adverts}
                         session={session}
                         isLoading={isFetching}
                         onBookAdvert={bookAdvertHandler}

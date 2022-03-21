@@ -40,6 +40,7 @@ function Home(props) {
                         <AdvertList 
                             type='tiles' 
                             currentPage={currentPage}
+                            onSetCurrentPage={setCurrentPage}
                             adverts={adverts}
                             session={session}
                             isLoading={isFetching}

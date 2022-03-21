@@ -12,6 +12,7 @@ export const initialState = {
         isUpdating: false,
         isCreating: false,
         isDeleting: false,
+        isUploadingImage: false,
         currentPage: 0,
     }
 }

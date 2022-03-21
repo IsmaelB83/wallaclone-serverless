@@ -215,10 +215,10 @@ export class ProductAccess {
                 createdAt: createdAt
             },
             ConditionExpression: "productId = :productId",
-            UpdateExpression: "set attachmentUrl = :attachmentUrl",
+            UpdateExpression: "set photoUrl = :photoUrl",
             ExpressionAttributeValues:{
                 ":productId": productId,
-                ":attachmentUrl": attachmentUrl
+                ":photoUrl": attachmentUrl
             }
         }).promise()
         return true

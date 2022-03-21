@@ -5,7 +5,7 @@ import { withNamespaces } from 'react-i18next';
 // Own Components
 import Home from './Home';
 // Own modules
-import { AdvertsActions, SessionActions } from '../../store/GlobalActions';
+import { AdvertsActions, SessionActions, FiltersActions } from '../../store/GlobalActions';
 
 
 /**
@@ -25,8 +25,12 @@ const mapStateToProps = (state) => {
  * @param {Function} dispatch Dispatch del store
  */
 const mapDispatchToProps = (dispatch) => {
-    return {
+    return {        
+        // Filters
+        setCurrentPage: pageNumber => dispatch(FiltersActions.setCurrentPage(pageNumber)),
+        // Session
         logout: () => dispatch(SessionActions.logout()),
+        // Adverts
         fetchAdverts: () => dispatch(AdvertsActions.fetchAdverts()),
     }
 }

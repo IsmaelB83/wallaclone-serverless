@@ -1,6 +1,7 @@
 // Imports
 import * as ADVERTS from '../types/AdvertsTypes';
 import * as SESSION from '../types/SessionTypes';
+import * as FILTERS from '../types/FiltersTypes';
 import { initialState } from '../InitialState';
 
 /**
@@ -52,6 +53,13 @@ export function ui(state = initialState.ui, action) {
                 return { ...state, error: action.error, isCreating: false }
         case ADVERTS.CREATE_ADVERT_SUCCESS:
             return { ...state, error: null, isCreating: false }
+        // Attachments related
+        case ADVERTS.UPLOAD_IMAGE_REQUEST:
+            return { ...state, error: null, isUploadingImage: true }
+        case ADVERTS.UPLOAD_IMAGE_FAILURE:
+                return { ...state, error: action.error, isUploadingImage: false }
+        case ADVERTS.UPLOAD_IMAGE_SUCCESS:
+            return { ...state, error: null, isUploadingImage: false }
         // Deletion related
         case ADVERTS.DELETE_ADVERT_REQUEST:
             return { ...state, isDeleting: true, error: null }
@@ -62,6 +70,9 @@ export function ui(state = initialState.ui, action) {
         // Logout
         case SESSION.LOGOUT_SUCCESS:
             return initialState.ui;
+        // Pagination
+        case FILTERS.SET_PAGE:
+            return { ...state, currentPage: action.pageNumber }
         // Default
         default:
             return state;

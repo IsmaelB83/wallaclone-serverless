@@ -6,7 +6,7 @@ import { withNamespaces } from 'react-i18next';
 import SectionList from './SectionList';
 // Models
 // Own modules
-import { AdvertsActions, SessionActions } from '../../store/GlobalActions';
+import { AdvertsActions, SessionActions, FiltersActions } from '../../store/GlobalActions';
 
 /**
  * Inyecta props en mi componente para acceder al state del store
@@ -26,6 +26,8 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
     return {
+        // Filters
+        setCurrentPage: pageNumber => dispatch(FiltersActions.setCurrentPage(pageNumber)),
         // Session
         logout: () => dispatch(SessionActions.logout()),
         // Adverts

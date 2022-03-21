@@ -25,7 +25,7 @@ function Edit(props) {
     // Props destructuring
     const { enqueueSnackbar, fetchAdvert, mode, session, t} = props;
     const { productId } = props.match.params;
-    const { isFetching, isUpdating, isCreating, isDeleting, error } = props.ui;
+    const { isFetching, isUpdating, isCreating, isUploadingImage, error } = props.ui;
     const { userId } = queryString.parse(props.location.search);  
 
     // Load inicial
@@ -49,11 +49,11 @@ function Edit(props) {
         } else {
             // Lanzando operacion al backend
             if (mode === 'create') {
-                props.createAdvert(newAdvert)
+                props.createAdvert(newAdvert, inputs.file)
                 .then (res => enqueueSnackbar(t('Advert X created', { id: res.productId}), { variant: 'success' }))
                 .catch(error => enqueueSnackbar(t('Error creating advert ERROR', {error}), { variant: 'error' }));
             } else {
-                props.editAdvert(newAdvert)
+                props.editAdvert(newAdvert, inputs.file)
                 .then (res => enqueueSnackbar(t('Advert X updated', {id: res.productId}), { variant: 'success' }))
                 .catch(error => enqueueSnackbar(t('Error updating advert ERROR', {error}), { variant: 'error' }));
             }
@@ -69,6 +69,7 @@ function Edit(props) {
                     <HeaderAdvertEdit mode={mode}/>
                     { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
                     { isCreating && <Loading text={t('Trying to create advert...')}/> }
+                    { isUploadingImage && <Loading text={t('Trying to upload image...')}/> }
                     { advert &&
                         <AdvertForm noValidate 
                                     autoComplete='off' 

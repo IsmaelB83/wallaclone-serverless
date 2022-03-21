@@ -1,5 +1,6 @@
 // API
 import AdvertServices from '../../services/AdvertServices';
+import BucketServices from '../../services/BucketServices';
 // Actions
 import * as ACTIONS from '../types/AdvertsTypes';
 import { logout } from './SessionActions';
@@ -102,13 +103,35 @@ const fetchSoldHistorySuccess = adverts => ({ type: ACTIONS.FETCH_SOLD_HISTORY_S
 * Editar datos de un anuncio
 * @param {Object} advert Datos actualizados del anuncio
 */
-export const editAdvert = (advert) => {   
+export const editAdvert = (advert, newPhoto) => {   
     return async function(dispatch, getState, extra) {
         dispatch(editAdvertRequest());
         return AdvertServices.editAdvert(advert, getState().session.jwt)
         .then(response => {
             dispatch(editAdvertSuccess(response));
-            extra.history.push('/');
+            if (newPhoto) {
+                dispatch(uploadImageRequest())
+                AdvertServices.getPresignedUrl(response.productId, getState().session.jwt)
+                .then(url => {
+                    BucketServices.uploadFile(url, newPhoto)
+                    .then(result => {
+                        dispatch(uploadImageSuccess());
+                        extra.history.push('/');
+                    })
+                    .catch (error => {
+                        let message = error.response && error.response.data ? error.response.data.data : error.message;  
+                        dispatch(uploadImageFailure(message));
+                        throw message;
+                    })
+                })
+                .catch (error => {
+                    let message = error.response && error.response.data ? error.response.data.data : error.message;  
+                    dispatch(uploadImageFailure(message));
+                    throw message;
+                })
+            } else {
+                extra.history.push('/');
+            }
             return response;
         })
         .catch(error => {
@@ -178,13 +201,31 @@ const sellAdvertSuccess = advert => ({ type: ACTIONS.SELL_ADVERT_SUCCESS, advert
 * Crear un anuncio nuevo
 * @param {Object} advert Objeto con los datos del anuncio a crear
 */
-export const createAdvert = (advert) => {   
+export const createAdvert = (advert, photo) => {   
     return async function(dispatch, getState, extra) {
         dispatch(createAdvertRequest());
         return AdvertServices.postAdvert(advert, getState().session.jwt)
         .then(response => {
             dispatch(createAdvertSuccess(response));
-            extra.history.push('/');
+            dispatch(uploadImageRequest())
+            AdvertServices.getPresignedUrl(response.productId, getState().session.jwt)
+            .then(url => {
+                BucketServices.uploadFile(url, photo)
+                .then(result => {
+                    dispatch(uploadImageSuccess());
+                    extra.history.push('/');
+                })
+                .catch (error => {
+                    let message = error.response && error.response.data ? error.response.data.data : error.message;  
+                    dispatch(uploadImageFailure(message));
+                    throw message;
+                })
+            })
+            .catch (error => {
+                let message = error.response && error.response.data ? error.response.data.data : error.message;  
+                dispatch(uploadImageFailure(message));
+                throw message;
+            })
             return response;
         })
         .catch(error => {
@@ -199,6 +240,9 @@ export const createAdvert = (advert) => {
 const createAdvertRequest = () => ({ type: ACTIONS.CREATE_ADVERT_REQUEST });
 const createAdvertFailure = error => ({ type: ACTIONS.CREATE_ADVERT_FAILURE, error });
 const createAdvertSuccess = advert => ({ type: ACTIONS.CREATE_ADVERT_SUCCESS, advert });
+const uploadImageRequest = () => ({ type: ACTIONS.UPLOAD_IMAGE_REQUEST });
+const uploadImageFailure = error => ({ type: ACTIONS.UPLOAD_IMAGE_FAILURE, error });
+const uploadImageSuccess = () => ({ type: ACTIONS.UPLOAD_IMAGE_SUCCESS });
 
 /**
 * Eliminar un anuncio de la base de datos
