@@ -27,6 +27,7 @@ export default function TextAreaForm(props) {
                 multiline={true}
                 rows={3}
                 inputProps={{ maxLength: props.maxLength }}
+                disabled={props.disabled}
             />
         </FormControl>
     )

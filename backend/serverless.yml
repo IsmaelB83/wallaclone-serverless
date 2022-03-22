@@ -21,6 +21,9 @@
       apiGateway: true
 
     environment:
+      USERS_PROFILE_TABLE: users-${self:provider.stage}
+      AVATAR_S3_BUCKET: avatars-ibernal-${self:provider.stage}
+      AVATAR_S3_URL: https://avatars-ibernal-${self:provider.stage}.s3.amazonaws.com/
       PRODUCTS_TABLE: products-${self:provider.stage}
       PRODUCTS_TABLE_INDEX: products-index-${self:provider.stage}
       ATTACHMENT_S3_BUCKET: products-ibernal-${self:provider.stage}
@@ -55,6 +58,9 @@
         - name: UpdateProductRequest
           contentType: application/json
           schema: ${file(models/update-product-model.json)}
+        - name: UserProfileRequest
+          contentType: application/json
+          schema: ${file(models/user-profile-model.json)}
 
   functions:
 
@@ -302,6 +308,18 @@
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL
+      
+      UsersProfileTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          AttributeDefinitions:
+            - AttributeName: userId
+              AttributeType: S
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+          TableName: ${self:provider.environment.USERS_PROFILE_TABLE}
+          BillingMode: PAY_PER_REQUEST
 
       AttachmentsBucket:
         Type: AWS::S3::Bucket
@@ -335,3 +353,36 @@
                 Principal: '*'
                 Action: 's3:GetObject'
                 Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
+
+      AvatarsBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+          BucketName: ${self:provider.environment.AVATAR_S3_BUCKET}
+          CorsConfiguration:
+            CorsRules:
+              - 
+                AllowedOrigins:
+                  - '*'
+                AllowedHeaders:
+                  - '*'
+                AllowedMethods:
+                  - GET
+                  - PUT
+                  - POST
+                  - DELETE
+                  - HEAD
+                MaxAge: 300
+
+      AvatarsBucketPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+          Bucket: !Ref AvatarsBucket
+          PolicyDocument: 
+            Id: MyPolicy
+            Version: "2012-10-17"
+            Statement:
+              - Sid: PublicReadForGetBucketObjects
+                Effect: Allow
+                Principal: '*'
+                Action: 's3:GetObject'
+                Resource: 'arn:aws:s3:::${self:provider.environment.AVATAR_S3_BUCKET}/*'

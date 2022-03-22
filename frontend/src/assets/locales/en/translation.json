@@ -151,7 +151,7 @@
     "Reconnect": "Reconnect",
     "Write a message...": "Write a message...",
     "Your user profile": "Your user profile",
-    "From this section you can modify your profile MORE": "In this section you can modify your name, login email and password in Wallaclone. You can also personalize your user by uploading a profile avatar. That way the rest of the users will be able to identify your ads better.",
+    "From this section you can modify your profile MORE": "In this section you can modify your name, login and email attached to your auth0 profile in Wallaclone. You can also personalize your avatar by uploading a picture. That way the rest of the users will be able to identify your ads better.",
     "add": "add",
     "profile": "profile",
     "Home": "Home",

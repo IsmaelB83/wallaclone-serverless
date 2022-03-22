@@ -12,6 +12,7 @@ import Edit from '../Edit';
 import Login from '../Login';
 import Callback from '../Callback';
 import Home from '../Home';
+import Profile from '../Profile';
 import Error404 from '../Error404';
 // Own modules
 import { SessionActions } from '../../store/GlobalActions';
@@ -51,6 +52,7 @@ export default function App(props) {
                     <PrivateRoute path='/history' exact render={(props) => <SectionList {...props} listType='history'/>}/>
                     <PrivateRoute path='/advert/create' exact render={(props) => <Edit {...props} mode='create'/>}/>
                     <PrivateRoute path='/advert/edit/:productId' exact render={(props) => <Edit {...props} mode='edit'/>}/>
+                    <PrivateRoute path='/profile' exact component={Profile} />
                     <Route path='/callback' exact component={Callback} />
                     <Route path='/advert/:productId' exact component={Detail} />
                     <Route path='/' exact component={Home} />

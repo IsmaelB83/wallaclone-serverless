@@ -1,8 +1,10 @@
 // API
 import AuthServices from '../../services/AuthServices';
+import UserServices from '../../services/UserServices';
+// Models
+import Session from '../../models/Session';
 // Own modules
 import LocalStorage from '../../utils/Storage';
-import Session from '../../models/Session';
 // Actions
 import * as ACTIONS from '../types/SessionTypes';
 
@@ -36,9 +38,16 @@ export const loginRedirect = jwt => {
                 return extra.history.push('/login');
             }
             const session = new Session (authResult.expiresIn, authResult.idToken, authResult.idTokenPayload.sub);
-            dispatch(loginRedirectAction(session));
-            LocalStorage.saveLocalStorage(session);
-            return extra.history.push('/');
+            UserServices.get(session.userId, session.jwt)
+            .then(profile => session.setUserInformation(profile))
+            .catch(error => {
+                console.log(error)
+            })
+            .finally(() => {
+                dispatch(loginRedirectAction(session));
+                LocalStorage.saveLocalStorage(session);
+                return extra.history.push('/');
+            })
         })
 
     }
@@ -71,3 +80,30 @@ export const logout = () => {
 };
 
 const logoutAction = () => ({ type: ACTIONS.LOGOUT_SUCCESS })
+
+/**
+ * Editar datos de usuario
+ * @param {Object} user Objeto con los nuevos datos del usuario
+ * @param {String} jwt Token para autenticar en la API
+ */
+ export const editUser = user => {   
+    return async function(dispatch, getState, extra) {
+        dispatch(editUserRequest());
+        return UserServices.edit(user, getState().session.jwt)
+        .then (response => {
+            dispatch(editUserSuccess(response))
+            extra.history.push('/');
+            return response;
+        })
+        .catch(error => {
+            if (error.response && error.response.status === 401) dispatch(logout());
+            let message = error.response && error.response.data ? error.response.data.data : error.message;            
+            dispatch(editUserFailure(message));
+            throw message;
+        })
+    }
+};
+
+const editUserRequest = () => ({ type: ACTIONS.EDIT_ACCOUNT_REQUEST });
+const editUserFailure = error => ({ type: ACTIONS.EDIT_ACCOUNT_FAILURE, error });
+const editUserSuccess = user => ({ type: ACTIONS.EDIT_ACCOUNT_SUCCESS, user });

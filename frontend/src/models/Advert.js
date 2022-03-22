@@ -51,7 +51,6 @@ export default class Advert {
         this.user = {
             userId: ad.userId,
             login: String(ad.userId).slice(-10),
-            avatar: 'https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png',
             name: 'Ismael Bernal'
         };  
     }

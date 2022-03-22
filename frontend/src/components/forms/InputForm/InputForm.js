@@ -33,6 +33,7 @@ export default function InputForm(props) {
                 required={props.required}
                 inputProps={{ maxLength: props.maxLength }}
                 autoComplete={props.autoComplete}
+                disabled={props.disabled}
             />
         </FormControl>
     )

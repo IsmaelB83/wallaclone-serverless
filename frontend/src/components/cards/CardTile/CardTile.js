@@ -13,6 +13,7 @@ import CardImage from '../CardImage';
 // Models
 import Advert from '../../../models/Advert';
 // Assets
+import imageAvatar from '../../../assets/images/user.png'
 // CSS
 import './styles.css';
 
@@ -40,7 +41,7 @@ export default function CardTile (props) {
                 </div>
             </div>
             <div className='CardTile__Footer'>
-                <CardAvatar login={user.login} name={user.login} avatar={user.avatar}/>
+                <CardAvatar login={user.login} name={user.login} avatar={user.avatar || imageAvatar}/>
                 <Moment className='CardTile__Date' locale={i18n.language} fromNow>{createdAt}</Moment>
             </div>
         </article>

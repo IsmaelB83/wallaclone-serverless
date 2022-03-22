@@ -5,6 +5,7 @@ import moment from 'moment';
 // Material UI
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar'
+import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -17,14 +18,16 @@ import i18n from '../../../utils/i18n';
 // Assets
 import imageLogoXs from '../../../assets/images/logo.png';
 import imageLogoLg from '../../../assets/images/logo_large.png';
+import imageAvatar from '../../../assets/images/user.png'
 // CSS
 import './styles.css';
 
 // Componente NavBar
 export default function NavBar(props) {
 
-    // Función traducción
-    const { t } = props;
+    // Props destructuring
+    const { t, onLogout } = props;
+    const { session } = props;
 
     // Ocultar navbar
     const hide = HideOnScrollDown();
@@ -52,19 +55,23 @@ export default function NavBar(props) {
                             <LanguageIcon fontSize='small' />
                             <span>{language==='en'?'es':'en'}</span>
                         </MenuItem>
-                        { props.session && props.session.userId && 
+                        { session && session.userId && 
                             <React.Fragment>
                                 <MenuItem className='Navbar__MenuItem' component={Link} to='/advert/create'>
                                     <AddPhotoAlternateIcon fontSize='small'/>
                                     <span>{t('add')}</span>
                                 </MenuItem>
-                                <MenuItem className='Navbar__MenuItem' onClick={props.onLogout}>
+                                <MenuItem className='Navbar__MenuItem' component={Link} to='/profile'>
+                                    <Avatar className='Avatar' alt='avatar' src={session.avatar || imageAvatar}/>
+                                    <span>{t('profile')}</span>
+                                </MenuItem>
+                                <MenuItem className='Navbar__MenuItem' onClick={onLogout}>
                                     <ExitToAppIcon fontSize='small' />
                                     <span>{t('logout')}</span>
                                 </MenuItem>
                             </React.Fragment>
                         }
-                        { ( !props.session || !props.session.userId ) &&
+                        { ( !session || !session.userId ) &&
                             <MenuItem className='Navbar__MenuItem' component={Link} to='/login'>
                                 <PermIdentityIcon fontSize='small' />
                                 <span>{t('login')}</span>
