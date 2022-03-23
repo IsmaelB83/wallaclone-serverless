@@ -11,16 +11,16 @@ export default class Session {
      * Constructor of a session object
      * @param {String} token JWT of current session
      */
-    constructor(expiresIn, jwt, id, user) {
+    constructor(expiresIn, jwt, id) {
         this.userId = id
         this.expiresAt = (expiresIn * 1000) + new Date().getTime();;
         this.jwt = jwt;
-        this.login = true;
-        this.user = user;
+        this.login = '';
         this.name = '';
         this.email = '';
         this.avatar = ''
-        this.completeProfile = true
+        this.isLogin = true;
+        this.isRequiredProfile = true
     }
 
     /**
@@ -28,8 +28,9 @@ export default class Session {
      * @param {*} user User information to personalize auth0 profile in wallaclone
      */
     setUserInformation(user) {
-        this.completeProfile = false
+        this.isRequiredProfile = false
         this.name = user.name
+        this.login = user.login
         this.email = user.email
         this.avatar =  user.avatar
     }

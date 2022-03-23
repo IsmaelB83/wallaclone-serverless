@@ -2,7 +2,7 @@
 export const initialState = {
     // Authenticated user
     session: {
-        login: false
+        isLogin: false
     },
     // Adverts in the app
     adverts: [],

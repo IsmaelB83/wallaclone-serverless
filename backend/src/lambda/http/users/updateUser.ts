@@ -16,7 +16,7 @@ export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
       // Constants
-      const updatedUser = JSON.parse(event.body)
+      const updatedUser = JSON.parse(String(event.body))
       // Update product
       const user = await updateUser(getUserId(event), updatedUser)
       return {

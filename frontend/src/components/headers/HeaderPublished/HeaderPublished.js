@@ -13,16 +13,19 @@ import '../styles.css';
 
 // Header published section
 export default function HeaderPublished(props) {
+    // Props destructuring
+    const { t, totalCount } = props;
+    // Render
     return (
         <div className='Section__Header'>
             <div className='Content__Title'>
-                <h1 className='Title'>{props.t('Your Products')}</h1>
-                <p className='Counter'><span>{props.totalCount}</span> {props.t('products')}</p>
+                <h1 className='Title'>{t('Your Products')}</h1>
+                <p className='Counter'><span>{totalCount}</span> {t('products')}</p>
             </div>
             <React.Fragment>
-                <p className='Text'>{props.t('In this section you can manage MORE')}</p>
+                <p className='Text'>{t('In this section you can manage MORE')}</p>
                 <Button className='Button__AddProduct' variant='contained' color='primary' component={Link} to='/advert/create'>
-                    {props.t('Add product')}
+                    {t('Add product')}
                 </Button>
             </React.Fragment>
         </div>

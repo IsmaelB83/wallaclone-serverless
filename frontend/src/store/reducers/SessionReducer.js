@@ -20,6 +20,7 @@ export function session (state = initialState.session, action) {
                     ...state,
                     avatar: action.user.avatar,
                     email: action.user.email,
+                    login: action.user.login,
                     name: action.user.name
                 }
         default:

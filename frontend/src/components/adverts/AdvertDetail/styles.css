@@ -53,14 +53,13 @@
     padding-top: .5rem;
 }
 
-.AdvertDetail__AuthorAvatar a div { 
+.AdvertDetail__AuthorAvatar div { 
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.AdvertDetail__AuthorAvatar a span { color: var(--main-color-dark); margin-left: 5px; }
-.AdvertDetail__AuthorAvatar a:hover span { font-weight: bold; }
+.AdvertDetail__AuthorAvatar span { color: var(--main-color-dark); margin-left: 5px; }
 
 .AdvertDetail__Price {
     letter-spacing: 1px;

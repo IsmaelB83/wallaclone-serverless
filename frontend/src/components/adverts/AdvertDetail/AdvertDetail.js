@@ -58,12 +58,10 @@ export default function AdvertDetail(props) {
                 <p className='AdvertDetail__Description'>{description}</p>
                 <div className='AdvertDetail__Footer'>
                     <div className='AdvertDetail__AuthorAvatar'>
-                        <Link to={`/published/${user.login}`} className=''>
-                            <div>
-                                <Avatar className='Avatar' alt='avatar' src={user.avatar}/>
-                                <span className='AdvertDetail__Author'>{user && user.name}</span>
-                            </div>
-                        </Link>
+                        <div>
+                            <Avatar className='Avatar' alt='avatar' src={user.avatar}/>
+                            <span className='AdvertDetail__Author'>{user && user.name}</span>
+                        </div>
                     </div>
                     <p className='AdvertDetail__Price'>{price} <span>€</span></p>
                 </div>

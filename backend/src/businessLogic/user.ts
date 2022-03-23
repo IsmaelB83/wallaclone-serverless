@@ -25,11 +25,9 @@ export async function getUser(userId: string): Promise<UserItem> {
 * @returns Updated user profile item
 */
 export async function updateUser(userId: string, updatedUser: UpdateUserRequest): Promise<UserItem> {
-    // Get old user information
+    // Update user
+    await USER_ACCESS.update(userId, updatedUser)
     const user = await USER_ACCESS.get(userId)
-    user.name = updatedUser.name || user.name
-    user.email = updatedUser.email || user.email
-    await USER_ACCESS.update(userId, user)
     return user
 }
 

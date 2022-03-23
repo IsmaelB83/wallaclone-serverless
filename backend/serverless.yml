@@ -266,7 +266,7 @@
       events:
         - http:
             method: get
-            path: users/
+            path: users
             cors: true
             authorizer: Auth
       iamRoleStatementsInherit: true
@@ -282,7 +282,7 @@
       events:
         - http:
             method: patch
-            path: users/
+            path: users
             cors: true
             authorizer: Auth
             reqValidatorName: RequestBodyValidator

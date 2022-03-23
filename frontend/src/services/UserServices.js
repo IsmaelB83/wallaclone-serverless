@@ -26,7 +26,7 @@ export default {
         }
         // Call endpoint and return
         return Axios.get(API_URL, config)
-        .then(res => res.data)
+        .then(res => res.data.Item)
     },
     
     // Edit user profile attached to auth0 identity
@@ -46,6 +46,6 @@ export default {
         }
         // Call endpoint and return
         return Axios.patch(API_URL, data, config)
-        .then(res => res.data)
+        .then(res => res.data.Item)
     }
 }

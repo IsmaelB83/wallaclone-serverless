@@ -11,13 +11,16 @@ import '../styles.css';
 
 // Header history section
 export default function HeaderHistory(props) {
+    // Props destructuring
+    const { t, totalCount } = props;
+    // Render
     return (
         <div className='Section__Header'>
             <div className='Content__Title'>
-                <h1 className='Title'>{props.t('Your sales')}</h1>
-                <p className='Counter'><span>{props.totalCount}</span> {props.t('products')}</p>
+                <h1 className='Title'>{t('Your sales')}</h1>
+                <p className='Counter'><span>{totalCount}</span> {t('products')}</p>
             </div>
-            <p className='Text'>{props.t('Here you can follow up all the products that you have sold')}</p>
+            <p className='Text'>{t('Here you can follow up all the products that you have sold')}</p>
         </div>
     );
 }

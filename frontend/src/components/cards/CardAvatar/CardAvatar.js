@@ -23,7 +23,6 @@ export default function CardAvatar (props) {
 }
 
 CardAvatar.propTypes = {
-    login: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
 }

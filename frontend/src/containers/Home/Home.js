@@ -28,8 +28,7 @@ function Home(props) {
     // On load
     useEffect(() => { 
         // Mostrar modal de completar perfil
-        if (session.jwt && session.completeProfile) {
-            console.log('mostrar modal')
+        if (session.jwt && session.isRequiredProfile) {
             setShowModalCompleteProfile(true)
         }
         // Obtener anuncios       
@@ -42,7 +41,6 @@ function Home(props) {
     const confirmModalCompleteProfile = () => {
         setShowModalCompleteProfile(false);
         props.history.push('/profile')
-        console.log(props)
     };
     const cancelModalCompleteProfile = () => {
         setShowModalCompleteProfile(false);

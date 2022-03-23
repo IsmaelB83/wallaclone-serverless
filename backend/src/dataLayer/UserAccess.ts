@@ -50,10 +50,11 @@ export class UserAccess {
             Key: {
                 userId: userId,
             },
-            UpdateExpression: "set #name = :name, email=:email",
+            UpdateExpression: "set #name = :name, email=:email, login=:login",
             ExpressionAttributeValues:{
                 ":name": user.name,
                 ":email": user.email,
+                ":login": user.login,
             },
             ExpressionAttributeNames: {
                 "#name": "name",

@@ -6,13 +6,17 @@
     "name": {
       "type": "string"
     },
-    "description": {
+    "email": {
       "type": "string"
+    },
+    "login": {
+        "type": "string"
     }
   },
   "required": [
     "name",
-    "email"
+    "email",
+    "login"
   ],
   "additionalProperties": false
 }

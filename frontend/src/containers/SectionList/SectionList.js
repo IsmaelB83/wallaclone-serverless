@@ -27,26 +27,22 @@ export default function SectionList (props) {
             bookAdvert, sellAdvert, deleteAdvert, logout } = props;
     const { currentPage, isFetching, isUpdating, isDeleting } = props.ui;
     const { adverts, session, history, listType } = props;
-    const { login } = props.match.params;
 
     // Cargo anuncios del usuario solicitado
     useEffect(() => {
         switch (listType) {
             case 'history':
                 fetchSoldHistory()
-                .catch(error => enqueueSnackbar(t('Error loading USER sold history ERROR', {user: session.userId, error}), { variant: 'error' }));
+                .catch(error => enqueueSnackbar(t('Error loading history ERROR', { error }), { variant: 'error' }));
                 break;
             case 'published':
                 fetchUserAdverts()
-                .catch(error => {
-                    console.log(error)
-                    enqueueSnackbar(t('Error loading USER adverts ERROR', {user: login, error}), { variant: 'error' })
-                });
+                .catch(error => enqueueSnackbar(t('Error loading adverts ERROR', { user:error }), { variant: 'error' }));
                 break;
             default:
                 break;
         }
-    }, [listType, fetchSoldHistory, fetchUserAdverts, enqueueSnackbar, login, session, t]);
+    }, [listType, fetchSoldHistory, fetchUserAdverts, enqueueSnackbar, session, t]);
 
     // Reservado
     const bookAdvertHandler = productId => {
@@ -89,7 +85,7 @@ export default function SectionList (props) {
             <NavBar session={session} onLogout={logout}/>
             <Container className='Container'>
                 <main className='Section__Wrapper'>
-                    {HeaderSection(listType, adverts.length, login, session)}
+                    { HeaderSection(listType, adverts.length) }
                     { isUpdating && <Loading text={t('Trying to edit advert...')}/> }
                     { isDeleting && <Loading text={t('Trying to delete advert...')}/> }
                     <AdvertList 
@@ -117,10 +113,10 @@ export default function SectionList (props) {
     );
 }
 
-function HeaderSection(listType, totalCount, login, session) {
+function HeaderSection(listType, totalCount) {
     switch (listType) {
         case 'published':
-            return <HeaderPublished login={login} session={session} totalCount={totalCount}/>;
+            return <HeaderPublished totalCount={totalCount}/>;
         case 'history':
             return <HeaderHistory totalCount={totalCount}/>;
         default:

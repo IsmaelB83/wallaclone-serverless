@@ -41,7 +41,7 @@ export default function CardTile (props) {
                 </div>
             </div>
             <div className='CardTile__Footer'>
-                <CardAvatar login={user.login} name={user.login} avatar={user.avatar || imageAvatar}/>
+                <CardAvatar login={user.login} name={user.name} avatar={user.avatar || imageAvatar}/>
                 <Moment className='CardTile__Date' locale={i18n.language} fromNow>{createdAt}</Moment>
             </div>
         </article>

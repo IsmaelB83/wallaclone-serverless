@@ -30,11 +30,11 @@ export default function Footer(props) {
                         <HomeIcon fontSize='small' />
                         <span>{t('Home')}</span>
                     </MenuItem>
-                    <MenuItem className={`Footer__MenuItem ${active==='published'?'Footer__MenuItem--active':''}`} component={Link} to={'/published'} disabled={session.completeProfile}>
+                    <MenuItem className={`Footer__MenuItem ${active==='published'?'Footer__MenuItem--active':''}`} component={Link} to={'/published'} disabled={session.isRequiredProfile}>
                         <ViewListIcon fontSize='small' />
                         <span>{t('My adverts')}</span>
                     </MenuItem>
-                    <MenuItem className={`Footer__MenuItem ${active==='history'?'Footer__MenuItem--active':''}`} component={Link} to='/history' disabled={session.completeProfile}>
+                    <MenuItem className={`Footer__MenuItem ${active==='history'?'Footer__MenuItem--active':''}`} component={Link} to='/history' disabled={session.isRequiredProfile}>
                         <TrendingUpIcon fontSize='small' />
                         <span>{t('Sold History')}</span>
                     </MenuItem>

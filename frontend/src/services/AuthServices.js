@@ -36,7 +36,6 @@ export default class AuthServices {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 callback(null, authResult);
             } else if (err) {
-                console.log(err);
                 callback(err, null);
             }
         });

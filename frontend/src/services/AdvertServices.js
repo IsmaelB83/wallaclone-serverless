@@ -129,7 +129,6 @@ export default {
             description: advert.description,
             price: advert.price,
             type: advert.type,
-            //photoUrl: photoUrl
         }
         // Headers for authenticated endpoint
         const config  = {

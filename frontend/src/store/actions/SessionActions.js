@@ -41,9 +41,9 @@ export const loginRedirect = () => {
             const session = new Session (authResult.expiresIn, authResult.idToken, authResult.idTokenPayload.sub);
             LocalStorage.saveLocalStorage(session);
             UserServices.get(session.jwt)
-            .then(profile => {
-                if (profile && profile.name) { 
-                    session.setUserInformation(profile)
+            .then(user => {
+                if (user) { 
+                    session.setUserInformation(user)
                     LocalStorage.saveLocalStorage(session);
                 }
                 dispatch(loginRequestSuccess(session));
@@ -79,7 +79,7 @@ const logoutAction = () => ({ type: ACTIONS.LOGOUT_SUCCESS })
  * @param {Object} user Objeto con los nuevos datos del usuario
  * @param {String} jwt Token para autenticar en la API
  */
- export const editUser = user => {   
+ export const editUser = (user) => {   
     return async function(dispatch, getState, extra) {
         dispatch(editUserRequest());
         return UserServices.edit(user, getState().session.jwt)
