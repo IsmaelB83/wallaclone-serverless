@@ -10,10 +10,10 @@ import { initialState } from '../InitialState';
 export function session (state = initialState.session, action) {
     switch (action.type) {
         case TYPES.LOGIN_SUCCESS:
-        case TYPES.LOGIN_FROM_STORAGE:
             return action.session;
         case TYPES.LOGIN_REQUEST:
         case TYPES.LOGOUT_SUCCESS:
+        case TYPES.LOGIN_ERROR:
             return initialState.session;
         case TYPES.EDIT_ACCOUNT_SUCCESS:
                 return {

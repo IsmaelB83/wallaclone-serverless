@@ -11,14 +11,13 @@ import AuthForm from '../../components/forms/AuthForm';
 // Login
 function Login(props) {
     
-    // Translate
-    const { t } = props;
     // Props destructuring
-    const { enqueueSnackbar } = props;
+    const { t, enqueueSnackbar, loginRequest } = props;
+    const { isAuthenticating } = props;
       
     // Dispatch login action
     const submitLogin = (inputs) => {
-        props.loginRequest()
+        loginRequest()
         .then(res => enqueueSnackbar(t('Redirecting auth0...'), { variant: 'info' }))
         .catch(error => enqueueSnackbar(error, { variant: 'error', }));
     }
@@ -27,7 +26,7 @@ function Login(props) {
     return (
         <AuthForm 
             form='login'
-            isLoading={props.isAuthenticating} 
+            isLoading={isAuthenticating} 
             onSubmit={submitLogin}
         />
     );

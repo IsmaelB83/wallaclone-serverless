@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { withNamespaces } from 'react-i18next';
 // Material UI
 // Own Components
-import AuthForm from '../../components/forms/AuthForm';
+import RedirectForm from '../../components/forms/RedirectForm';
 // Containers
 // Own modules
 // Assets
@@ -12,27 +12,22 @@ import AuthForm from '../../components/forms/AuthForm';
 // Main component
 function Callback(props) {
   
-    // Translate
-    const { t } = props;
     // Props destructuring
-    const { location,  } = props;
-    const { loginRedirect, enqueueSnackbar } = props;
+    const { t, loginRedirect, enqueueSnackbar } = props;
+    const { location } = props;
 
     // On load
     useEffect(() => {
         if (location.hash) {
-            loginRedirect(location.hash)
-            .then(res => enqueueSnackbar(t('Redirecting home...'), { variant: 'info' }))
+            loginRedirect()
+            .then(res => enqueueSnackbar(t('Ok. Redirect home...'), { variant: 'info' }))
             .catch(error => enqueueSnackbar(error, { variant: 'error', }));
         }
     }, [location, enqueueSnackbar, loginRedirect, t]);
 
     // Render
     return (
-        <AuthForm 
-            form='login'
-            isLoading={props.isAuthenticating} 
-        />
+        <RedirectForm/>
     );
 }
 

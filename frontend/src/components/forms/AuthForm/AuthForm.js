@@ -16,8 +16,11 @@ import './styles.css';
 
 // Componente para renderizar cualquiera de los formularios de la sección de autenticación:
 export default function AuthForm(props) {  
-    const { t } = props;
-    const submit = (inputs) => props.onSubmit(inputs);
+    // Props destructuring
+    const { t, onSubmit } = props;
+    // Method submit login
+    const submit = (inputs) => onSubmit(inputs);
+    // Render
     return (
         <div className='Login'>
             <div className='Login__Wrapper'>

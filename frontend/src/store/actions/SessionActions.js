@@ -30,43 +30,36 @@ const loginRequestAction = () => ({ type: ACTIONS.LOGIN_REQUEST });
 * @param {String} login Login del usuario
 * @param {String} password Password del usuario
 */
-export const loginRedirect = jwt => {  
+export const loginRedirect = () => {  
     return async function(dispatch, getState, extra) {
-        authServices.handleAuthentication((err, authResult) => {
-            if (err) {
-                alert(`Error: ${err.error}. Check the console for further details.`);
-                return extra.history.push('/login');
+        authServices.handleAuthentication((error, authResult) => {
+            if (error) {
+                let message = error.response && error.response.data ? error.response.data.data : error.message;
+                dispatch(loginRequestError(error));
+                throw message;
             }
             const session = new Session (authResult.expiresIn, authResult.idToken, authResult.idTokenPayload.sub);
-            UserServices.get(session.userId, session.jwt)
-            .then(profile => session.setUserInformation(profile))
-            .catch(error => {
-                console.log(error)
-            })
-            .finally(() => {
-                dispatch(loginRedirectAction(session));
-                LocalStorage.saveLocalStorage(session);
+            LocalStorage.saveLocalStorage(session);
+            UserServices.get(session.jwt)
+            .then(profile => {
+                if (profile && profile.name) { 
+                    session.setUserInformation(profile)
+                    LocalStorage.saveLocalStorage(session);
+                }
+                dispatch(loginRequestSuccess(session));
                 return extra.history.push('/');
             })
+            .catch(error => {
+                let message = error.response && error.response.data ? error.response.data.data : error.message;
+                dispatch(loginRequestError(error));
+                throw message;
+            })
         })
-
     }
 };
 
-const loginRedirectAction = session => ({ type: ACTIONS.LOGIN_SUCCESS, session });
-
-/**
-* Login with token from local storage (validate first in backend)
-*/
-export const loginFromStorage = jwt => {   
-    return async function(dispatch, getState, extra) {
-        const session = new Session (jwt);
-        dispatch(loginFromStorageAction(session));
-        return { type: ACTIONS.LOGIN_FROM_STORAGE, session }
-    }
-};
-
-const loginFromStorageAction = session => ({ type: ACTIONS.LOGIN_FROM_STORAGE, session });
+const loginRequestSuccess = session => ({ type: ACTIONS.LOGIN_SUCCESS, session });
+const loginRequestError =  () => ({ type: ACTIONS.LOGIN_ERROR });
 
 /**
 * Logout

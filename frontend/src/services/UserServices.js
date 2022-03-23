@@ -15,10 +15,8 @@ const API_URL = `${process.env.REACT_APP_API_URL}/users`;
 */
 export default {
     
-    /**
-    * Get user profile attached to an auth0 identity
-    */
-    get: async (userId, jwt) => {
+    // Get user profile attached to an auth0 identity
+    get: async jwt => {
         // Config 
         const config = {
             headers: { 
@@ -27,13 +25,11 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.get( `${API_URL}/${userId}`, config)
+        return Axios.get(API_URL, config)
         .then(res => res.data)
     },
     
-    /**
-    * Edit user profile attached to auth0 identity
-    */
+    // Edit user profile attached to auth0 identity
     edit: async (user, jwt) => {
         // Advert data
         const data = {
@@ -49,7 +45,7 @@ export default {
             }
         }
         // Call endpoint and return
-        return Axios.put( API_URL, data, config )
+        return Axios.patch(API_URL, data, config)
         .then(res => res.data)
     }
 }

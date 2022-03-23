@@ -1,5 +1,5 @@
 // NPM Modules
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ConnectedRouter } from 'connected-react-router'
 import { Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -15,10 +15,8 @@ import Home from '../Home';
 import Profile from '../Profile';
 import Error404 from '../Error404';
 // Own modules
-import { SessionActions } from '../../store/GlobalActions';
 import configureStore, { history } from '../../store';
 import { initialState } from '../../store/InitialState';
-import LocalStorage from '../../utils/Storage';
 // Models
 // Assets
 // CSS
@@ -26,21 +24,8 @@ import LocalStorage from '../../utils/Storage';
 // APP Root Component
 export default function App(props) {
 
-    // Destructure props
-    const { enqueueSnackbar, t } = props;
-    
-    // Session from local storage
-    const session = LocalStorage.readLocalStorage();
     // Configuro el store, y sincronizo el history del store con el de router
     const store = configureStore(initialState);
-
-    // Dispatch login in case of session in local storage
-    useEffect(() => {
-        if (session && session.jwt) {
-            store.dispatch(SessionActions.loginFromStorage(session.jwt))
-            .catch (error => enqueueSnackbar(error, { variant: 'error', }));
-        }
-    }, [store, session, enqueueSnackbar, t]);
 
     // Render
     return (

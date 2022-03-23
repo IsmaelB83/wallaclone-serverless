@@ -18,29 +18,29 @@ import './styles.css';
 export default function Footer(props) {
 
     // Función traducción
-    const { t, active } = props;
+    const { t, active, session } = props;
      
     // Render del componente
     return (
         <footer title='Wallaclone' className='Footer'>
             <Container>
-            { props.session && props.session.userId &&
+            { session && session.userId &&
                 <div className='Footer__Menu'>
                     <MenuItem className={`Footer__MenuItem ${active==='Home'?'Footer__MenuItem--active':''}`} component={Link} to='/'>
                         <HomeIcon fontSize='small' />
                         <span>{t('Home')}</span>
                     </MenuItem>
-                    <MenuItem className={`Footer__MenuItem ${active==='published'?'Footer__MenuItem--active':''}`} component={Link} to={'/published'}>
+                    <MenuItem className={`Footer__MenuItem ${active==='published'?'Footer__MenuItem--active':''}`} component={Link} to={'/published'} disabled={session.completeProfile}>
                         <ViewListIcon fontSize='small' />
                         <span>{t('My adverts')}</span>
                     </MenuItem>
-                    <MenuItem className={`Footer__MenuItem ${active==='history'?'Footer__MenuItem--active':''}`} component={Link} to='/history'>
+                    <MenuItem className={`Footer__MenuItem ${active==='history'?'Footer__MenuItem--active':''}`} component={Link} to='/history' disabled={session.completeProfile}>
                         <TrendingUpIcon fontSize='small' />
                         <span>{t('Sold History')}</span>
                     </MenuItem>
                 </div>
             }
-            { ( !props.session || !props.session.userId ) &&
+            { ( !session || !session.userId ) &&
                 <div className='Footer__Content'>
                     <div className='SocialLinks'>
                         <a className='SocialLinks__link SocialLinks__link--github' href='https://github.com/IsmaelB83'><GitHubIcon /></a>

@@ -13,7 +13,6 @@ import { SessionActions } from '../../store/GlobalActions';
  */
 const mapStateToProps = (state) => {
     return {
-        isAuthenticating: state.ui.isAuthenticating,
     }
 }
 
@@ -23,7 +22,7 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
     return {
-        loginRedirect: token => dispatch(SessionActions.loginRedirect(token))
+        loginRedirect: () => dispatch(SessionActions.loginRedirect())
     }
 }
 

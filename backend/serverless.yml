@@ -224,6 +224,7 @@
             method: delete
             path: products/{productId}
             cors: true
+            authorizer: Auth
       iamRoleStatementsInherit: true
       iamRoleStatementsName: DeleteProduct-Lambda-role
       iamRoleStatements:
@@ -243,6 +244,7 @@
             method: post
             path: products/{productId}/attachment
             cors: true
+            authorizer: Auth
       iamRoleStatementsInherit: true
       iamRoleStatementsName: GenerateUploadUrl-Lambda-role
       iamRoleStatements:
@@ -258,6 +260,72 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+
+    GetUser:
+      handler: src/lambda/http/users/getUser.handler
+      events:
+        - http:
+            method: get
+            path: users/
+            cors: true
+            authorizer: Auth
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GetUser-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
+
+    UpdateUser:
+      handler: src/lambda/http/users/updateUser.handler
+      events:
+        - http:
+            method: patch
+            path: users/
+            cors: true
+            authorizer: Auth
+            reqValidatorName: RequestBodyValidator
+            documentation:
+              summary: Update an existing User profile
+              description: Update an existing User profile
+              requestModels:
+                'application/json': UserProfileRequest
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: UpdateUser-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - dynamodb:UpdateItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
+
+    GenerateAvatarUrl:
+      handler: src/lambda/http/users/generateUploadUrl.handler
+      events:
+        - http:
+            method: post
+            path: users/avatar
+            cors: true
+            authorizer: Auth
+      iamRoleStatementsInherit: true
+      iamRoleStatementsName: GenerateAvatarUrl-Lambda-role
+      iamRoleStatements:
+        - Effect: Allow
+          Action: 
+            - s3:PutObject
+          Resource: arn:aws:s3:::${self:provider.environment.AVATAR_S3_BUCKET}/*
+        - Effect: Allow
+          Action: 
+            - dynamodb:UpdateItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
   resources:
     Resources:

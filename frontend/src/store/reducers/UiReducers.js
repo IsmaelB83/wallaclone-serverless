@@ -31,8 +31,9 @@ export function ui(state = initialState.ui, action) {
         case SESSION.LOGIN_REQUEST:
             return { ...state, error: null, isAuthenticating: true }
         case SESSION.LOGIN_SUCCESS:
-        case SESSION.LOGIN_FROM_STORAGE:
             return { ...state, error: null, isAuthenticating: false }
+        case SESSION.LOGIN_ERROR:
+                return { ...state, error: action.error, isAuthenticating: false }
         // Edit related
         case ADVERTS.EDIT_ADVERT_REQUEST:
         case ADVERTS.BOOK_ADVERT_REQUEST:

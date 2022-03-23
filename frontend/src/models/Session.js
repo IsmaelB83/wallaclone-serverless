@@ -15,10 +15,12 @@ export default class Session {
         this.userId = id
         this.expiresAt = (expiresIn * 1000) + new Date().getTime();;
         this.jwt = jwt;
+        this.login = true;
         this.user = user;
         this.name = '';
         this.email = '';
         this.avatar = ''
+        this.completeProfile = true
     }
 
     /**
@@ -26,6 +28,7 @@ export default class Session {
      * @param {*} user User information to personalize auth0 profile in wallaclone
      */
     setUserInformation(user) {
+        this.completeProfile = false
         this.name = user.name
         this.email = user.email
         this.avatar =  user.avatar

@@ -1,7 +1,9 @@
 // APP Initia State
 export const initialState = {
     // Authenticated user
-    session: {},
+    session: {
+        login: false
+    },
     // Adverts in the app
     adverts: [],
     // UI State

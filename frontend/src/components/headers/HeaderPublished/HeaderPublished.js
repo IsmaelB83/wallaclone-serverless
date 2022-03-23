@@ -13,13 +13,10 @@ import '../styles.css';
 
 // Header published section
 export default function HeaderPublished(props) {
-    // Identifies if we are looking at the user logged in published section
-    const user = props.session && props.login === props.session.login;
     return (
         <div className='Section__Header'>
             <div className='Content__Title'>
-                { user && <h1 className='Title'>{props.t('Your Products')}</h1> }
-                { !user && <h1 className='Title'>{props.t('Products published by')} <i>{props.login}</i></h1> } 
+                <h1 className='Title'>{props.t('Your Products')}</h1>
                 <p className='Counter'><span>{props.totalCount}</span> {props.t('products')}</p>
             </div>
             <React.Fragment>
