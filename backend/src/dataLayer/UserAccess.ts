@@ -45,8 +45,6 @@ export class UserAccess {
     */
     async update (userId: string, user: UserUpdate): Promise<boolean> {
         // Update token
-        console.log(userId)   
-        console.log(user)
         await DB_CLIENT.update({
             TableName: DB_TABLE,
             Key: {
