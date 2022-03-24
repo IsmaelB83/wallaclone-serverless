@@ -47,5 +47,19 @@ export default {
         // Call endpoint and return
         return Axios.patch(API_URL, data, config)
         .then(res => res.data.Item)
-    }
+    },
+
+    // Obtener presigned url para subir el avatar al bucket
+    getPresignedUrl: jwt => {
+        // Headers for authenticated endpoint
+        const config  = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            }
+        }
+        // Call endpoint and return
+        return Axios.post(`${API_URL}/avatar`, {}, config)
+        .then(res => res.data.response);
+    },
 }

@@ -20,14 +20,14 @@ function Profile(props) {
 
     // Translate 
     const { t, editUser, enqueueSnackbar, logout } = props;
-    const { session, isUpdating } = props;
+    const { session, isUpdating, isUploadingImage } = props;
 
     // Submit (save data)
-    const submitProfile = (inputs) => {
+    const submitProfile = inputs => {
       // Creo usuario desde inputs
-      const { email, name, login } = inputs;
+      const { email, name, login, file } = inputs;
       // Dispatch update user
-      editUser({email, name, login})
+      editUser({email, name, login}, file)
         .then (res => enqueueSnackbar(t('User updated successfully'), { variant: 'success' }))
         .catch (error => enqueueSnackbar(t('Error updating user data ERROR', {error}), { variant: 'error', }));
     }
@@ -39,12 +39,13 @@ function Profile(props) {
             <Container className='Container'>
                 <main className='Section__Wrapper Profile'>
                     <HeaderProfile/>
+                    { isUpdating && <Loading text={t('Updating user data...')}/> }
+                    { isUploadingImage && <Loading text={t('Trying to upload image...')}/> }
                     <ProfileForm    noValidate 
                                     autoComplete='off' 
                                     className='Profile__Form'
                                     user={session}
                                     onSubmit={submitProfile}/>
-                    { isUpdating && <Loading text={t('Updating user data...')}/> }
                 </main>
             </Container>
             <Footer session={session} onLogout={logout}/>

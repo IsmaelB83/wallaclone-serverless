@@ -16,13 +16,13 @@ export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
       // Generate pre-signed url
-      const uploadUrl = await createAvatarPresignedUrl(getUserId(event))
+      const response = await createAvatarPresignedUrl(getUserId(event))
       // Return Ok
       return {
           statusCode: 200,
           headers: { 'Access-Control-Allow-Origin': '*' },
           body: JSON.stringify({
-              uploadUrl
+              response
           })
       }     
     } catch (e) {

@@ -20,7 +20,8 @@ import './styles.css';
 export default function ProfileForm(props) {
    
     // Props destructuring
-    const { t } = props;
+    const { t, onSubmit } = props;
+    const { user } = props;
 
     // Submit changes
     const submit = (inputs) => {
@@ -28,7 +29,7 @@ export default function ProfileForm(props) {
             inputs.file = fileTemp;
             inputs.avatar = '';
         }
-        props.onSubmit(inputs);
+        onSubmit(inputs);
     }
 
     // Open input file
@@ -37,7 +38,7 @@ export default function ProfileForm(props) {
     // Handle close modal
     const refInputFile = useRef(undefined);
     const [fileTemp, setFileTemp] = useState();
-    const [photoTemp, setPhotoTemp] = useState(props.avatar);
+    const [photoTemp, setPhotoTemp] = useState(user.avatar);
     const changeInputFile = (ev) => {
         ev.stopPropagation();
         ev.preventDefault();
@@ -48,7 +49,7 @@ export default function ProfileForm(props) {
 
     // Render
     return (
-        <Form className='ProfileForm' onSubmit={submit} initial={props.user}>
+        <Form className='ProfileForm' onSubmit={submit} initial={user}>
             <div className='ProfileForm__Photo'>
                 <span className='ProfileForm__Photo--overlay' onClick={openInputFile}>{t('change your avatar')}</span>
                 <input type='file' id='file' ref={refInputFile} style={{display: 'none'}} onChange={changeInputFile} />
@@ -67,8 +68,8 @@ export default function ProfileForm(props) {
                 </div>
             </div>
             <div className='ProfileForm__Buttons'>
-                <Button type='submit' variant='contained' color='primary'>{props.t('Accept')}</Button>
-                <Button type='button' variant='contained' color='secondary' component={Link} to={'/'}>{props.t('Cancel')}</Button>
+                <Button type='submit' variant='contained' color='primary'>{t('Accept')}</Button>
+                <Button type='button' variant='contained' color='secondary' component={Link} to={'/'}>{t('Cancel')}</Button>
             </div>
         </Form>
     );

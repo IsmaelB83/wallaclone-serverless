@@ -16,13 +16,15 @@ export function session (state = initialState.session, action) {
         case TYPES.LOGIN_ERROR:
             return initialState.session;
         case TYPES.EDIT_ACCOUNT_SUCCESS:
-                return {
-                    ...state,
-                    avatar: action.user.avatar,
-                    email: action.user.email,
-                    login: action.user.login,
-                    name: action.user.name
-                }
+            return {
+                ...state,
+                email: action.user.email,
+                login: action.user.login,
+                name: action.user.name,
+                isRequiredProfile: false
+            }
+        case TYPES.UPLOAD_AVATAR_SUCCESS:
+            return { ...state, avatar: action.avatar }
         default:
             return state;
     }

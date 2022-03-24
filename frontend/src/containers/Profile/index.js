@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
     return {
         session: state.session,
         isUpdating: state.ui.isUpdating,
+        isUploadingImage: state.ui.isUploadingImage,
         error: state.ui.error,
     }
 }
@@ -25,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         // Session
         logout: () => dispatch(SessionActions.logout()),
-        editUser: (user) => dispatch(SessionActions.editUser(user)),
+        editUser: (user, file) => dispatch(SessionActions.editUser(user, file)),
         deleteAccount: (id) => dispatch(SessionActions.deleteAccount(id)),
     }
 }

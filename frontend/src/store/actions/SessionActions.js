@@ -1,6 +1,7 @@
 // API
 import AuthServices from '../../services/AuthServices';
 import UserServices from '../../services/UserServices';
+import BucketServices from '../../services/BucketServices';
 // Models
 import Session from '../../models/Session';
 // Own modules
@@ -79,12 +80,30 @@ const logoutAction = () => ({ type: ACTIONS.LOGOUT_SUCCESS })
  * @param {Object} user Objeto con los nuevos datos del usuario
  * @param {String} jwt Token para autenticar en la API
  */
- export const editUser = (user) => {   
+ export const editUser = (user, photo) => {   
     return async function(dispatch, getState, extra) {
         dispatch(editUserRequest());
         return UserServices.edit(user, getState().session.jwt)
         .then (response => {
             dispatch(editUserSuccess(response))
+            if (photo) {
+                dispatch(uploadAvatarRequest())
+                UserServices.getPresignedUrl(getState().session.jwt)
+                .then(response => {
+                    BucketServices.uploadFile(response.presignedUrl, photo)
+                    .then(result => dispatch(uploadAvatarSuccess(response.url)))
+                    .catch (error => {
+                        let message = error.result && error.result.data ? error.result.data.data : error.message;  
+                        dispatch(uploadAvatarFailure(message));
+                        throw message;
+                    })
+                })
+                .catch (error => {
+                    let message = error.response && error.response.data ? error.response.data.data : error.message;  
+                    dispatch(uploadAvatarFailure(message));
+                    throw message;
+                })
+            }
             extra.history.push('/');
             return response;
         })
@@ -100,3 +119,6 @@ const logoutAction = () => ({ type: ACTIONS.LOGOUT_SUCCESS })
 const editUserRequest = () => ({ type: ACTIONS.EDIT_ACCOUNT_REQUEST });
 const editUserFailure = error => ({ type: ACTIONS.EDIT_ACCOUNT_FAILURE, error });
 const editUserSuccess = user => ({ type: ACTIONS.EDIT_ACCOUNT_SUCCESS, user });
+const uploadAvatarRequest = () => ({ type: ACTIONS.UPLOAD_AVATAR_REQUEST });
+const uploadAvatarFailure = error => ({ type: ACTIONS.UPLOAD_AVATAR_FAILURE, error });
+const uploadAvatarSuccess = avatar => ({ type: ACTIONS.UPLOAD_AVATAR_SUCCESS, avatar });

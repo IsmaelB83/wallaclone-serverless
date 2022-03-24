@@ -103,17 +103,17 @@ const fetchSoldHistorySuccess = adverts => ({ type: ACTIONS.FETCH_SOLD_HISTORY_S
 * Editar datos de un anuncio
 * @param {Object} advert Datos actualizados del anuncio
 */
-export const editAdvert = (advert, newPhoto) => {   
+export const editAdvert = (advert, photo) => {   
     return async function(dispatch, getState, extra) {
         dispatch(editAdvertRequest());
         return AdvertServices.editAdvert(advert, getState().session.jwt)
         .then(response => {
             dispatch(editAdvertSuccess(response));
-            if (newPhoto) {
+            if (photo) {
                 dispatch(uploadImageRequest())
                 AdvertServices.getPresignedUrl(response.productId, getState().session.jwt)
                 .then(url => {
-                    BucketServices.uploadFile(url, newPhoto)
+                    BucketServices.uploadFile(url, photo)
                     .then(result => {
                         dispatch(uploadImageSuccess());
                         extra.history.push('/');

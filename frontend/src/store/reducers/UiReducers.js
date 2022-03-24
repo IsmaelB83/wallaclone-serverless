@@ -71,6 +71,19 @@ export function ui(state = initialState.ui, action) {
         // Logout
         case SESSION.LOGOUT_SUCCESS:
             return initialState.ui;
+        // Edit profile
+        case SESSION.EDIT_ACCOUNT_REQUEST:
+            return { ...state, error: null, isUpdating: true }
+        case SESSION.EDIT_ACCOUNT_FAILURE:
+            return { ...state, error: action.error, isUpdating: false }
+        case SESSION.EDIT_ACCOUNT_SUCCESS:
+            return { ...state, error: null, isUpdating: false }
+        case SESSION.UPLOAD_AVATAR_REQUEST:
+            return { ...state, error: null, isUploadingImage: true }
+        case SESSION.UPLOAD_AVATAR_FAILURE:
+            return { ...state, error: action.error, isUploadingImage: false }
+        case SESSION.UPLOAD_AVATAR_SUCCESS:
+            return { ...state, error: null, isUploadingImage: false }
         // Pagination
         case FILTERS.SET_PAGE:
             return { ...state, currentPage: action.pageNumber }

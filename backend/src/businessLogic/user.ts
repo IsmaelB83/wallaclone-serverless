@@ -36,11 +36,12 @@ export async function updateUser(userId: string, updatedUser: UpdateUserRequest)
 * @param userId Owner of the product
 * @returns String representing the presigned url
 */
-export async function createAvatarPresignedUrl(userId: string): Promise<String> {
+export async function createAvatarPresignedUrl(userId: string): Promise<Object> {
     // Constants
     const presignedUrl = await getAvatarUploadUrl(userId)
     // Update attachment url
-    USER_ACCESS.updateAttachmentUrl(userId, `${process.env.AVATAR_S3_URL}${userId}`)
+    const url = `${process.env.AVATAR_S3_URL}${userId}`
+    USER_ACCESS.updateAttachmentUrl(userId, url)
     // Return presigned url
-    return presignedUrl
+    return {presignedUrl, url}
 }

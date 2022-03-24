@@ -40,8 +40,8 @@ function Edit(props) {
         }
     }, [fetchAdvert, productId, userId, mode, enqueueSnackbar, t])
 
-    // Manejador del submit del formulario
-    const submitAdvert = (inputs) => {
+    // Submit (save data)
+    const submitAdvert = inputs => {
         // Creo un anuncio con los datos del estado y lo valido
         const newAdvert = new Advert(inputs);
         if (!newAdvert.isValid() || ( !inputs.file && !inputs.photoUrl )) {

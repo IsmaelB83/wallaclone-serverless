@@ -66,19 +66,19 @@ export class UserAccess {
     /**
     * Method to update a USER
     * @param userId User id
-    * @param attachmentUrl User avatar url to update
+    * @param avatar User avatar url to update
     * @returns  
     */
-    async updateAttachmentUrl (userId: string, attachmentUrl: String): Promise<boolean> {
+    async updateAttachmentUrl (userId: string, avatar: String): Promise<boolean> {
         // Update token
         await DB_CLIENT.update({
             TableName: DB_TABLE,
             Key: {
                 userId: userId
             },
-            UpdateExpression: "set photoUrl = :photoUrl",
+            UpdateExpression: "set avatar = :avatar",
             ExpressionAttributeValues:{
-                ":photoUrl": attachmentUrl
+                ":avatar": avatar
             }
         }).promise()
         return true
