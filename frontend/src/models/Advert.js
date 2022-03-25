@@ -48,11 +48,7 @@ export default class Advert {
         this.name = ad.name;
         this.photoUrl = ad.photoUrl;
         this.type = ad.type;
-        this.user = {
-            userId: ad.userId,
-            login: String(ad.userId).slice(-10),
-            name: 'Ismael Bernal'
-        };  
+        this.user = ad.user
     }
 
     /**

@@ -60,7 +60,7 @@ export default function AdvertDetail(props) {
                     <div className='AdvertDetail__AuthorAvatar'>
                         <div>
                             <Avatar className='Avatar' alt='avatar' src={user.avatar}/>
-                            <span className='AdvertDetail__Author'>{user && user.name}</span>
+                            <span className='AdvertDetail__Author'>{`${user.name} (${user.login})`}</span>
                         </div>
                     </div>
                     <p className='AdvertDetail__Price'>{price} <span>€</span></p>

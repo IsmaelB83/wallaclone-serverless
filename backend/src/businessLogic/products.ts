@@ -4,19 +4,26 @@ import { ProductItem } from '../models/ProductItem'
 import { CreateProductRequest } from '../requests/CreateProductRequest'
 import { UpdateProductRequest } from '../requests/UpdateProductRequest'
 import { ProductAccess } from '../dataLayer/ProductAccess'
+import { UserAccess } from '../dataLayer/UserAccess'
 import { getAttachmentUploadUrl } from '../dataLayer/AttachmentAccess'
 
 // Constants
 const PRODUCT_ACCESS = new ProductAccess()
+const USER_ACCESS = new UserAccess()
 
-    /**
-    * Receives the API event and interacts with datalayer to RETRIEVES all products from user
-    * @returns List of products from user
-    */
-    export async function getProducts(): Promise<ProductItem[]> {
+/**
+* Receives the API event and interacts with datalayer to RETRIEVES all products from user
+* @returns List of products from user
+*/
+export async function getProducts(): Promise<ProductItem[]> {
     // Get products
-    return await PRODUCT_ACCESS.getProducts()
-  }
+    const products = await PRODUCT_ACCESS.getProducts()
+    for (const product of products) {
+        const user = await USER_ACCESS.get(product.userId)
+        product.user = user;
+    }
+    return products;
+}
 
 /**
 * Receives new product information and interacts with datalayer to INSERT a new product in the database
@@ -26,15 +33,15 @@ const PRODUCT_ACCESS = new ProductAccess()
 * @returns Returns the new product in database
 */
 export async function createProduct(product: CreateProductRequest, userId: string, uuid: string): Promise<ProductItem> {
-  // Create product
-  return await PRODUCT_ACCESS.create({
-    userId: userId,
-    productId: uuid,
-    createdAt: new Date().toISOString(),
-    booked: false,
-    sold: false,
-    ...product
-  })
+    // Create product
+    return await PRODUCT_ACCESS.create({
+        userId: userId,
+        productId: uuid,
+        createdAt: new Date().toISOString(),
+        booked: false,
+        sold: false,
+        ...product
+    })
 }
 
 /**
@@ -45,19 +52,19 @@ export async function createProduct(product: CreateProductRequest, userId: strin
 * @returns Updated product item
 */
 export async function updateProduct(productId: string, userId: string, updatedProduct: UpdateProductRequest): Promise<ProductItem> {
-  // Get old product information
-  const product = await PRODUCT_ACCESS.get(productId, userId)
-  // Check user id of token is the same as user in bearer
-  if (product && product.userId === userId) {
-      product.name = updatedProduct.name || product.name,
-      product.description = updatedProduct.description || product.description,
-      product.price = updatedProduct.price || product.price,
-      product.type = updatedProduct.type || product.type,
-      product.photoUrl = updatedProduct.photoUrl || product.photoUrl
-    await PRODUCT_ACCESS.update(productId, userId, product.createdAt, product)
-    return product
-  }
-  throw `User not authorized to update product ${productId}`
+    // Get old product information
+    const product = await PRODUCT_ACCESS.get(productId, userId)
+    // Check user id of token is the same as user in bearer
+    if (product && product.userId === userId) {
+        product.name = updatedProduct.name || product.name,
+        product.description = updatedProduct.description || product.description,
+        product.price = updatedProduct.price || product.price,
+        product.type = updatedProduct.type || product.type,
+        product.photoUrl = updatedProduct.photoUrl || product.photoUrl
+        await PRODUCT_ACCESS.update(productId, userId, product.createdAt, product)
+        return product
+    }
+    throw `User not authorized to update product ${productId}`
 }
 
 /**
@@ -67,15 +74,18 @@ export async function updateProduct(productId: string, userId: string, updatedPr
 * @returns Updated product
 */
 export async function bookProduct(productId: string, userId: string): Promise<ProductItem> {
-  // Get old product information
-  const product = await PRODUCT_ACCESS.get(productId, userId)
-  product.booked = !product.booked
-  // Check user id of token is the same as user in bearer
-  if (product && product.userId === userId) {
-    await PRODUCT_ACCESS.book(productId, userId, product.createdAt, product.booked)
-    return product;
-  }
-  throw `User not authorized to mark as booked a product ${productId}`
+    // Get user data, then products and assign user information to products
+    const user = await USER_ACCESS.get(userId)
+    // Get old product information
+    const product = await PRODUCT_ACCESS.get(productId, userId)
+    product.user = user;
+    product.booked = !product.booked
+    // Check user id of token is the same as user in bearer
+    if (product && product.userId === userId) {
+        await PRODUCT_ACCESS.book(productId, userId, product.createdAt, product.booked)
+        return product;
+    }
+    throw `User not authorized to mark as booked a product ${productId}`
 }
 
 /**
@@ -85,15 +95,18 @@ export async function bookProduct(productId: string, userId: string): Promise<Pr
 * @returns Updated product
 */
 export async function soldProduct(productId: string, userId: string): Promise<ProductItem> {
-  // Get old product information
-  const product = await PRODUCT_ACCESS.get(productId, userId)
-  product.sold = !product.sold
-  // Check user id of token is the same as user in bearer
-  if (product && product.userId === userId) {
-    await PRODUCT_ACCESS.sold(productId, userId, product.createdAt, product.sold) 
-    return product;
-  }
-  throw `User not authorized to mark as sold a product ${productId}`
+    // Get user data, then products and assign user information to products
+    const user = await USER_ACCESS.get(userId)
+    // Get old product information
+    const product = await PRODUCT_ACCESS.get(productId, userId)
+    product.user = user;
+    product.sold = !product.sold
+    // Check user id of token is the same as user in bearer
+    if (product && product.userId === userId) {
+        await PRODUCT_ACCESS.sold(productId, userId, product.createdAt, product.sold) 
+        return product;
+    }
+    throw `User not authorized to mark as sold a product ${productId}`
 }
 
 /**
@@ -103,13 +116,13 @@ export async function soldProduct(productId: string, userId: string): Promise<Pr
 * @returns True (delete corret) or False (error deleting)
 */
 export async function deleteProduct(productId: string, userId: string): Promise<boolean> {
-  // Get old product information
-  const product = await PRODUCT_ACCESS.get(productId, userId)
-  // Check user id of token is the same as user in bearer
-  if (product && product.userId === userId) {
-    return await PRODUCT_ACCESS.delete(productId, userId, product.createdAt)
-  }
-  throw `User not authorized to delete product ${productId}`
+    // Get old product information
+    const product = await PRODUCT_ACCESS.get(productId, userId)
+    // Check user id of token is the same as user in bearer
+    if (product && product.userId === userId) {
+        return await PRODUCT_ACCESS.delete(productId, userId, product.createdAt)
+    }
+    throw `User not authorized to delete product ${productId}`
 }
 
 /**
@@ -118,8 +131,14 @@ export async function deleteProduct(productId: string, userId: string): Promise<
 * @returns List of products from user
 */
 export async function getProductsForUser(userId: string): Promise<ProductItem[]> {
-  // Get products
-  return await PRODUCT_ACCESS.getProductsUser(userId)
+    // Get user data, then products and assign user information to products
+    const user = await USER_ACCESS.get(userId)
+    // Get products and assign user information
+    const products = await PRODUCT_ACCESS.getProductsUser(userId)
+    for (const product of products) {
+        product.user = user;
+    }
+    return products;
 }
 
 /**
@@ -128,11 +147,17 @@ export async function getProductsForUser(userId: string): Promise<ProductItem[]>
 * @returns List of products from user
 */
 export async function getHistoryForUser(userId: string): Promise<ProductItem[]> {
-    // Get products
-    return await PRODUCT_ACCESS.getHistoryUser(userId)
-  }
+    // Get user data, then products and assign user information to products
+    const user = await USER_ACCESS.get(userId)
+    // Get products and assign user information
+    const products = await PRODUCT_ACCESS.getHistoryUser(userId)
+    for (const product of products) {
+        product.user = user;
+    }
+    return products;
+}
 
-  
+
 /**
 * Receives the API event and interacts with datalayer to RETRIEVES a specific product
 * @param productId ID of the product
@@ -140,8 +165,11 @@ export async function getHistoryForUser(userId: string): Promise<ProductItem[]> 
 * @returns List of products from user
 */
 export async function getProduct(productId: string, userId: string): Promise<ProductItem> {
-  // Get product
-  return await PRODUCT_ACCESS.get(productId, userId)
+    // Get user data, then product and assign user information to product
+    const user = await USER_ACCESS.get(userId)
+    const product = await PRODUCT_ACCESS.get(productId, userId)
+    product.user = user;
+    return product;
 }
 
 /**
@@ -151,16 +179,16 @@ export async function getProduct(productId: string, userId: string): Promise<Pro
 * @returns String representing the presigned url
 */
 export async function createAttachmentPresignedUrl(productId: string, userId: string): Promise<String> {
-  // Get old product information
-  const product = await PRODUCT_ACCESS.get(productId, userId)
-  // Check user id of token is the same as user in bearer
-  if (product && product.userId === userId) {
-    // Constants
-    const presignedUrl = await getAttachmentUploadUrl(productId)
-    // Update attachment url
-    PRODUCT_ACCESS.updateAttachmentUrl(productId, userId, product.createdAt, `${process.env.ATTACHMENT_S3_URL}${productId}`)
-    // Return presigned url
-    return presignedUrl
-  } 
-  throw `User not authorized to update attachment url of the product ${productId}`
+    // Get old product information
+    const product = await PRODUCT_ACCESS.get(productId, userId)
+    // Check user id of token is the same as user in bearer
+    if (product && product.userId === userId) {
+        // Constants
+        const presignedUrl = await getAttachmentUploadUrl(productId)
+        // Update attachment url
+        PRODUCT_ACCESS.updateAttachmentUrl(productId, userId, product.createdAt, `${process.env.ATTACHMENT_S3_URL}${productId}`)
+        // Return presigned url
+        return presignedUrl
+    } 
+    throw `User not authorized to update attachment url of the product ${productId}`
 }

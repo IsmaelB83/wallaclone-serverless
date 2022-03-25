@@ -1,3 +1,5 @@
+import { UserItem } from "./UserItem";
+
 export interface ProductItem {
   userId: string
   productId: string
@@ -9,4 +11,5 @@ export interface ProductItem {
   photoUrl: string
   booked: boolean
   sold: boolean
+  user?: UserItem
 }

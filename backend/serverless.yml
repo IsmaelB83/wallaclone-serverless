@@ -81,6 +81,10 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
     GetProducts:
       handler: src/lambda/http/products/getProducts.handler
@@ -96,6 +100,10 @@
           Action: 
             - dynamodb:Scan
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
     GetUserProducts:
       handler: src/lambda/http/products/getUserProducts.handler
@@ -112,6 +120,10 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
     GetHistoryUser:
       handler: src/lambda/http/products/getHistoryUser.handler
@@ -128,6 +140,10 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
     CreateProduct:
       handler: src/lambda/http/products/createProduct.handler
@@ -176,6 +192,10 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
     
     BookProduct:
       handler: src/lambda/http/products/bookProduct.handler
@@ -196,6 +216,10 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
     SoldProduct:
       handler: src/lambda/http/products/soldProduct.handler
@@ -216,6 +240,10 @@
           Action: 
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_TABLE_INDEX}
+        - Effect: Allow
+          Action: 
+            - dynamodb:Query
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_PROFILE_TABLE}
 
     DeleteProduct:
       handler: src/lambda/http/products/deleteProduct.handler
