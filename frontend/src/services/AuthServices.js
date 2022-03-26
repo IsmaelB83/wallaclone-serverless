@@ -8,7 +8,7 @@ export default class AuthServices {
     auth0 = new auth0.WebAuth({
         domain: 'dev-wbbbogs3.us.auth0.com',              // Auth0 domain
         clientID: 'yIKjkEIUrCZ70Pw0zYXl3QkHTdMyLHmA',     // Auth0 client id
-        redirectUri: 'http://localhost:3000/callback',    // Callback url in frontend
+        redirectUri: process.env.REACT_APP_AUTH0_REDIRECT,   // Callback url in frontend
         responseType: 'token id_token',
         scope: 'openid'
     });
@@ -18,6 +18,7 @@ export default class AuthServices {
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.handleAuthentication = this.handleAuthentication.bind(this);
+        console.log(this.auth0)
     }
     
     // Request login to auth0
