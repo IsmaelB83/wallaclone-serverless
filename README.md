@@ -20,6 +20,10 @@ You can access the application trough cloudfront here: https://d3onyjbgfh1a2i.cl
   - [Deploy serverless](#Deploy-Serverless)
   - [Start Frontend](#Start-Frontend)
 - [USER-GUIDE](#USER-GUIDE)
+  - [Public area](#Public-area)
+  - [Auth](#Auth)
+  - [Private Area](#Private-area)
+  - [Create/modify products](#Create/modify-products)
 
 ## ARCHITECTURE
 The architecture of Wallaclone-serverless is shown in below imagen:
@@ -132,31 +136,48 @@ Once everything is configured, the backend is deployed in AWS you can start the 
 Find below some screenshots from wallaclone:
 
 ### Public area
-In this section any users accessing our application are able to see what products are published, and open the detail of each of them. There is no need to have an account for this purpose:
+In this section everybody is able to see what products are published, and open the detail of each of them. There is no need to have an account for this purpose:
 
-![alt text](documentation/wallaclone_0.png)
+![Public area](documentation/wallaclone_0.png)
 
-![alt text](documentation/wallaclone_1.png)
+![Product details](documentation/wallaclone_1.png)
 
-### Authentication
-In order for a user to access it's private area it needs to authenticate first. Authentication is performed against Auth0. Once the authentication is successfull, auth0 will redirect to /callback
+### Auth
+In order for an authorized user to access the private area it needs to authenticate first. Authentication is performed against Auth0. For that you can navigate to /login, or click in the login button (top-right corner in the navbar). Once the authentication is successfull, auth0 will redirect to /callback
 
-![alt text](documentation/wallaclone_3.png)
+Click the login button to navigate trough Auth0
+![Login form](documentation/wallaclone_2.png)
 
-![alt text](documentation/wallaclone_4.png)
+Redirection to auth0 will take place now:
+![Login redirection](documentation/wallaclone_3.png)
 
-### Adverts
+Login trough Auth0, either with specific account or trough goole id:
+![Login auth0](documentation/wallaclone_4.png)
 
-![alt text](documentation/wallaclone_8.png)
+If authentication is OK, auth0 will redirect to /callback passing the jwt and identity. Then wallaclone will redirect to home /
+![Login callback](documentation/wallaclone_5.png)
 
-![alt text](documentation/wallaclone_9.png)
+### Private Area
 
-### Notifications and emails
+Once the user is authenticated, wallaclone will request in case it is the first time the user enters the application, to complete its profile. This is a mandatory operation in order to be able to publish new products. If you click in OK, wallaclone will redirect to /profile section:
+![Private area](documentation/wallaclone_6.png)
 
-![alt text](documentation/wallaclone_6.png)
+Select an avatar, enter your name, nickname and email address. This is only informative, because authentication and identity is done trough auth0.
+![Profile](documentation/wallaclone_7.png)
 
-![alt text](documentation/wallaclone_7.png)
+An authenticated user is able to access two new sections:
+- List of products published (either path /published or click in the footer button "my products"):
+![Profile](documentation/wallaclone_8.png)
 
-### Chat
+From previous list you can also mark a product as sold/booked very easily. Or you can click in edit in order to navigate to the details product page, and modify its information and/or image
 
-![alt text](documentation/wallaclone_5.png)
+- List of products already sold (either path /history or click in the footer button "my sales"):
+![Profile](documentation/wallaclone_9.png)
+
+### Create/modify products
+
+To create a product enter an image, type (buy/sell), name, price and description (path /advert/create or click in button "add" in the navbar)
+![alt text](documentation/wallaclone_10.png)
+
+You can edit as well the information of an already published product (path /advert/edit/:productId?userId=:userId, or click on edit in a specific product)
+![alt text](documentation/wallaclone_11.png)
