@@ -23,7 +23,7 @@ You can access the application trough cloudfront here: https://d3onyjbgfh1a2i.cl
 
 ## ARCHITECTURE
 The architecture of Wallaclone-serverless is shown in below imagen:
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/architecture.jpg)
+![alt text](documentation/architecture.jpg)
 
 Main component is the API Gateway that provide endpoints to two different resources:
 - Products: what the user will publish either to sell or buy
@@ -134,29 +134,29 @@ Find below some screenshots from wallaclone:
 ### Public area
 In this section any users accessing our application are able to see what products are published, and open the detail of each of them. There is no need to have an account for this purpose:
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_0.png)
+![alt text](documentation/wallaclone_0.png)
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_1.png)
+![alt text](documentation/wallaclone_1.png)
 
 ### Authentication
 In order for a user to access it's private area it needs to authenticate first. Authentication is performed against Auth0. Once the authentication is successfull, auth0 will redirect to /callback
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_03.png)
+![alt text](documentation/wallaclone_3.png)
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_04.png)
+![alt text](documentation/wallaclone_4.png)
 
 ### Adverts
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_08.png)
+![alt text](documentation/wallaclone_8.png)
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_09.png)
+![alt text](documentation/wallaclone_9.png)
 
 ### Notifications and emails
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_06.png)
+![alt text](documentation/wallaclone_6.png)
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_07.png)
+![alt text](documentation/wallaclone_7.png)
 
 ### Chat
 
-![alt text](https://raw.githubusercontent.com/IsmaelB83/wallaclone-serverless/master/documentation/wallaclone_05.png)
+![alt text](documentation/wallaclone_5.png)
